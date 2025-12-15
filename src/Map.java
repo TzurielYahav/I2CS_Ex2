@@ -198,16 +198,19 @@ public class Map implements Map2D, Serializable
         }
         int dx = Math.abs(p2.getX() - p1.getX());
         int dy = Math.abs(p2.getY() - p1.getY());
-
         if (dx >= dy)
         {
             if (p1.getX() <= p2.getX())
-            {
-                for (int i = p1.getX(); i <= p2.getX(); i++)
-                {
-
-                }
-            }
+                DrawLineX(p1.getX(), p1.getY(), p2.getX(), p2.getY(), color);
+            else
+                DrawLineX(p2.getX(), p2.getY(), p1.getX(), p1.getY(), color);
+        }
+        else
+        {
+            if (p1.getX() <= p2.getX())
+                DrawLineY(p1.getX(), p1.getY(), p2.getX(), p2.getY(), color);
+            else
+                DrawLineY(p2.getX(), p2.getY(), p1.getX(), p1.getY(), color);
         }
     }
 
@@ -256,4 +259,25 @@ public class Map implements Map2D, Serializable
     }
 	////////////////////// Private Methods ///////////////////////
 
+    private void DrawLineX(int x1, int y1, int x2, int y2, int color)
+    {
+        double a = (double)(y2 - y1) / (x2 - x1);   // compute the A element
+        double b = y1 - x1 * a;                     // compute the B element
+        for (int x = x1; x <= x2; x++)
+        {
+            double fx = a * x + b;
+            _map[x][(int) fx] = color;
+        }
+    }
+
+    private void DrawLineY(int x1, int y1, int x2, int y2, int color)
+    {
+        double a = (double)(y2 - y1) / (x2 - x1);   // compute the A element
+        double b = y1 - x1 * a;                     // compute the B element
+        for (int y = y1; y <= y2; y++)
+        {
+            double gy = (y + b) / a;
+            _map[(int) gy][y] = color;
+        }
+    }
 }
