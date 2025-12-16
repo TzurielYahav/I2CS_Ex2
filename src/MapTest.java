@@ -76,9 +76,9 @@ class MapTest {
     @Test
     void testAddMap2D()
     {
-        int[][] resArr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
+        int[][] arr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
 
-        _m2.init(resArr1);
+        _m2.init(arr1);
         _m3.addMap2D(_m2);
 
         assertTrue(_m2.equals(_m3));
@@ -88,11 +88,11 @@ class MapTest {
     @Test
     void testMul()
     {
-        int[][] resArr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
+        int[][] arr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
 
-        _m0.init(resArr1);
-        _m1.init(resArr1);
-        _m2.init(resArr1);
+        _m0.init(arr1);
+        _m1.init(arr1);
+        _m2.init(arr1);
         _m0.mul(5.5);
         _m1.mul(0.5);
         _m2.mul(5);
@@ -104,18 +104,24 @@ class MapTest {
     @Test
     void testRescale()
     {
-        int[][] resArr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
-        int[][] resArr2 = {{0,1,2,3}, {1,2,3,4}, {2,3,4,5}, {3,4,5,6}};
+        int[][] arr1 = {{0,1,2,3}, {1,2,3,4}, {2,3,4,5}, {3,4,5,6}};
 
-        _m0.init(resArr2);
-        _m1.init(resArr2);
+        int[][] resArr1 = {{0,2}, {2,4}};
+        int[][] resArr2 = {{0, 0, 1, 1, 2, 2, 3, 3}, {1, 1, 2, 2, 3, 3, 4, 4}, {2, 2, 3, 3, 4, 4, 5, 5}, {3, 3, 4, 4, 5, 5, 6, 6}};
+        int[][] resArr3 = {{0, 0, 1, 2, 2, 3}, {0, 0, 1, 2, 2, 3}, {1, 1, 2, 3, 3, 4}, {2, 2, 3, 4, 4, 5}, {2, 2, 3, 4, 4, 5}, {3, 3, 4, 5, 5, 6}};
+
+        _m0.init(arr1);
+        _m1.init(arr1);
+        _m2.init(arr1);
         _m0.rescale(0.5,0.5);
         _m1.rescale(2,1);
+        _m2.rescale(1.5,1.5);
 
-        System.out.println(Arrays.deepToString(_m0.getMap()));
         System.out.println(Arrays.deepToString(_m1.getMap()));
-        assertTrue(_m0.equals(_m2));
-        assertTrue(_m1.equals(_m3));
+        System.out.println(Arrays.deepToString(new Map(resArr2).getMap()));
+        assertTrue(_m0.equals(new Map(resArr1)));
+        assertTrue(_m1.equals(new Map(resArr2)));
+        assertTrue(_m2.equals(new Map(resArr3)));
         assertThrowsExactly(IllegalArgumentException.class, () -> _m2.rescale(2,0));
 
         //_m1.fill(p1,1, true);
