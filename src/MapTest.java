@@ -63,10 +63,11 @@ class MapTest {
         _m1 = new Map(_map_4x4_2);
         _m2 = new Map(_map_4x4_3);
 
-        assertEquals(resArr1, _m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false));
-        assertEquals(resArr2, _m1.shortestPath(new Index2D(0, 0), new Index2D(3, 3), 1, false));
-        assertEquals(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, false));
-        assertEquals(resArr4, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, true));
+        System.out.println(Arrays.toString(_m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
+        assertTrue(isEqualArray(resArr1, _m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
+        assertTrue(isEqualArray(resArr2, _m1.shortestPath(new Index2D(0, 0), new Index2D(3, 3), 1, false)));
+        assertTrue(isEqualArray(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, false)));
+        assertTrue(isEqualArray(resArr4, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, true)));
     }
 
     @Test
@@ -91,7 +92,7 @@ class MapTest {
         assertEquals(res4, _m2.allDistance(new Index2D(0, 0), 1, true));
     }
 
-    boolean equalArray(Pixel2D[] arr1, Pixel2D[] arr2)
+    boolean isEqualArray(Pixel2D[] arr1, Pixel2D[] arr2)
     {
         if(arr1 == null || arr2 == null)
         {
