@@ -11,7 +11,10 @@ public class Ex2_GUI
 {
     public static void drawMap(Map2D map)
     {
-        //
+        double min = 50, max=20;
+        int samples = 16;
+        StdDraw.setScale(min, max);
+        StdDraw.clear();
     }
 
     /**
@@ -20,7 +23,7 @@ public class Ex2_GUI
      */
     public static Map2D loadMap(String mapFileName)
     {
-        Map2D ans = null;
+        Map2D ans = new Map(4);
 
         return ans;
     }
@@ -42,5 +45,6 @@ public class Ex2_GUI
         Map2D map = loadMap(mapFile);
         drawMap(map);
     }
+
     /// ///////////// Private functions ///////////////
 }
