@@ -343,10 +343,25 @@ public class Map implements Map2D, Serializable
     @Override
     public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic)
     {
-        Map2D ans = null;  // the result.
+        if (!isInside(start))
+            throw new RuntimeException("start is out of range");
+        if (getPixel(start) == obsColor)
+            throw new RuntimeException("start is unreachable");
 
-        return ans;
+        int[][] exploreMap = new int[_map.length][_map[0].length];
+        for (int x = 0; x < _map.length; x++)
+        {
+            for (int y = 0; y < _map[0].length; y++)
+            {
+                if (_map[x][y] == obsColor)
+                    exploreMap[x][y] = -1;
+            }
+        }
+
+        allDistancesRec(start, 0, exploreMap, cyclic);
+        return new Map(exploreMap);
     }
+
 	////////////////////// Private Methods ///////////////////////
 
     private void DrawLineX(int x1, int y1, int x2, int y2, int color)
@@ -451,5 +466,34 @@ public class Map implements Map2D, Serializable
             ans.add(right);
         }
         return ans;
+    }
+
+    private void allDistancesRec(Pixel2D start,int distance, int[][] exploreMap, boolean cyclic)
+    {
+        exploreMap[start.getX()][start.getY()] =  distance;
+
+        int x = start.getX();
+        int y = start.getY();
+
+        Index2D up = isInBounds(x, y + 1, cyclic);
+        Index2D down = isInBounds(x, y - 1, cyclic);
+        Index2D left = isInBounds(x - 1, y, cyclic);
+        Index2D right = isInBounds(x + 1, y, cyclic);
+        if (isInside(up) && exploreMap[x][y + 1] == 0)
+        {
+            allDistancesRec(up, distance + 1, exploreMap, cyclic);
+        }
+        if (isInside(down) && exploreMap[x][y - 1] == 0)
+        {
+            allDistancesRec(down, distance + 1, exploreMap, cyclic);
+        }
+        if (isInside(left) && exploreMap[x - 1][y] == 0)
+        {
+            allDistancesRec(left, distance + 1, exploreMap, cyclic);
+        }
+        if (isInside(right) && exploreMap[x + 1][y] == 0)
+        {
+            allDistancesRec(right, distance + 1, exploreMap, cyclic);
+        }
     }
 }
