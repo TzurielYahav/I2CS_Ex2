@@ -43,10 +43,10 @@ public class Map implements Map2D, Serializable
     {
         if (w <= 0 || h <= 0)
             throw new IllegalArgumentException("Invalid width or height parameter");
-        _map = new int[w][h];
+        _map = new int[h][w];
         for (int i = 0; i < w * h; i++)
         {
-            _map[i % h][i / h] = v;
+            _map[i / h][i % h] = v;
         }
 	}
 
@@ -70,13 +70,13 @@ public class Map implements Map2D, Serializable
 	@Override
 	public int getWidth()
     {
-        return _map.length;
+        return _map[0].length;
     }
 
 	@Override
 	public int getHeight()
     {
-        return _map[0].length;
+        return _map.length;
     }
 
 	@Override
@@ -84,7 +84,7 @@ public class Map implements Map2D, Serializable
     {
         if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
             throw new IllegalArgumentException("x or y is not inside the map");
-        return _map[x][y];
+        return _map[y][x];
     }
 
 	@Override
@@ -92,7 +92,7 @@ public class Map implements Map2D, Serializable
     {
         if (!isInside(p))
             throw new IllegalArgumentException("Pixel2D is not inside the map");
-        return _map[p.getX()][p.getY()];
+        return _map[p.getY()][p.getX()];
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class Map implements Map2D, Serializable
     {
         if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
             throw new IllegalArgumentException("x or y is not inside the map");
-        _map[x][y] = v;
+        _map[y][x] = v;
     }
 
 	@Override
@@ -108,7 +108,7 @@ public class Map implements Map2D, Serializable
     {
         if (!isInside(p))
             throw new IllegalArgumentException("Pixel2D is not inside the map");
-        _map[p.getX()][p.getY()] = v;
+        _map[p.getY()][p.getX()] = v;
 	}
 
     @Override
@@ -117,7 +117,7 @@ public class Map implements Map2D, Serializable
         if (p == null)
             throw new NullPointerException("Pixel2D p is null");
         if (p.getX() >= 0 && p.getY() >= 0)
-            return p.getX() < _map.length && p.getY() < _map[0].length;
+            return p.getX() < _map[0].length && p.getY() < _map.length;
         return false;
     }
 
@@ -138,10 +138,10 @@ public class Map implements Map2D, Serializable
         if (sameDimensions(p))
         {
             int[][] otherMap = p.getMap();
-            int w = _map.length, h = _map[0].length;
+            int w = _map[0].length, h = _map.length;
             for (int i = 0; i < w * h; i++)
             {
-                _map[i % h][i / h] += otherMap[i % h][i / h];
+                _map[i / h][i % h] += otherMap[i / h][i % h];
             }
         }
     }
@@ -149,24 +149,24 @@ public class Map implements Map2D, Serializable
     @Override
     public void mul(double scalar)
     {
-        int w = _map.length, h = _map[0].length;
+        int w = _map[0].length, h = _map.length;
         for (int i = 0; i < w * h; i++)
         {
-            _map[i % h][i / h] = (int) ((double)_map[i % h][i / h] * scalar);
+            _map[i / h][i % h] = (int) ((double)_map[i / h][i % h] * scalar);
         }
     }
 
     @Override
     public void rescale(double sx, double sy)
     {
-        int[][] newMap = new int[(int) ((double)_map.length * sx)][(int) ((double)_map[0].length * sy)];
-        int w = newMap.length, h = newMap[0].length;
+        int[][] newMap = new int[(int) ((double)_map.length * sy)][(int) ((double)_map[0].length * sx)];
+        int w = newMap[0].length, h = newMap.length;
         for (int i = 0; i < w * h; i++)
         {
             int x = i % h, y = i / h;
-            if (x < _map.length && y < _map[0].length)
+            if (x < _map[0].length && y < _map.length)
             {
-                newMap[x][y] = _map[x][y];
+                newMap[y][x] = _map[y][x];
             }
         }
     }
@@ -178,7 +178,7 @@ public class Map implements Map2D, Serializable
             throw new NullPointerException("Pixel2D center is null");
         if (rad <= 0)
             throw new IllegalArgumentException("rad is out of range");
-        int w = _map.length, h = _map[0].length;
+        int w = _map[0].length, h = _map.length;
         int startX = (int) ((double)center.getX() - rad);
         int startY = (int) ((double)center.getY() - rad);
         for (int i = 0; i < rad; i++)
@@ -187,7 +187,7 @@ public class Map implements Map2D, Serializable
             {
                 if (isInside(new Index2D(startX + i, startY + j)))
                     if (center.distance2D(new Index2D(startX + i, startY + j)) <= rad)
-                        _map[startX + i][startY + j] = color;
+                        _map[startY + i][startX + j] = color;
             }
         }
     }
@@ -199,7 +199,7 @@ public class Map implements Map2D, Serializable
             throw new RuntimeException("p1 or p2 is out of range");
         if (p1.equals(p2))
         {
-            _map[p1.getX()][p1.getY()] = color;
+            _map[p1.getY()][p1.getX()] = color;
             return;
         }
         int dx = Math.abs(p2.getX() - p1.getX());
@@ -233,7 +233,7 @@ public class Map implements Map2D, Serializable
         {
             for (int j = y1; j <= y2; j++)
             {
-                _map[i][j] = color;
+                _map[j][i] = color;
             }
         }
     }
@@ -246,10 +246,10 @@ public class Map implements Map2D, Serializable
             int[][] otherMap = ((Map) ob).getMap();
             if (_map.length == otherMap.length &&  _map[0].length == otherMap[0].length)
             {
-                int w = _map.length, h = _map[0].length;
+                int w = _map[0].length, h = _map.length;
                 for (int i = 0; i < w * h; i++)
                 {
-                    if (_map[i % h][i / h] !=  otherMap[i % h][i / h])
+                    if (_map[i / h][i % h] !=  otherMap[i / h][i % h])
                         return false;
                 }
                 return true;
@@ -268,7 +268,7 @@ public class Map implements Map2D, Serializable
         if (!isInside(xy))
             throw new RuntimeException("xy is out of range");
         int ans = 0;
-        int oldColor = _map[xy.getX()][xy.getY()];
+        int oldColor = _map[xy.getY()][xy.getX()];
         if (oldColor != new_v)
         {
             ans = fillPixels(xy, oldColor, new_v, cyclic);
@@ -297,7 +297,7 @@ public class Map implements Map2D, Serializable
 
         exploreQueue.add(p1);
         parentQueue.add(p1);
-        exploreMap[p1.getX()][p1.getY()] = true;
+        exploreMap[p1.getY()][p1.getX()] = true;
 
         int currentPixel = 0;
         boolean found = false;
@@ -348,19 +348,19 @@ public class Map implements Map2D, Serializable
             throw new RuntimeException("start is unreachable");
 
         int[][] exploreMap = new int[_map.length][_map[0].length];
-        for (int x = 0; x < _map.length; x++)
+        for (int x = 0; x < _map[0].length; x++)
         {
-            for (int y = 0; y < _map[0].length; y++)
+            for (int y = 0; y < _map.length; y++)
             {
-                if (_map[x][y] == obsColor)
-                    exploreMap[x][y] = -1; // obstacle color
+                if (_map[y][x] == obsColor)
+                    exploreMap[y][x] = -1; // obstacle color
                 else
-                    exploreMap[x][y] = -2; // Not checked color
+                    exploreMap[y][x] = -2; // Not checked color
             }
         }
 
         ArrayList<Pixel2D> exploreQueue = new ArrayList<Pixel2D>();
-        exploreMap[start.getX()][start.getY()] =  0;
+        exploreMap[start.getY()][start.getX()] =  0;
         exploreQueue.add(start);
         while (!exploreQueue.isEmpty())
         {
@@ -379,7 +379,7 @@ public class Map implements Map2D, Serializable
         for (int x = x1; x <= x2; x++)
         {
             double fx = a * x + b;
-            _map[x][(int) fx] = color;
+            _map[(int) fx][x] = color;
         }
     }
 
@@ -390,7 +390,7 @@ public class Map implements Map2D, Serializable
         for (int y = y1; y <= y2; y++)
         {
             double gy = (y + b) / a;
-            _map[(int) gy][y] = color;
+            _map[y][(int) gy] = color;
         }
     }
 
@@ -460,7 +460,7 @@ public class Map implements Map2D, Serializable
             if (isInside(childrenCoords[i]) && getPixel(childrenCoords[i]) != obsColor && !exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()])
             {
                 children.add(childrenCoords[i]);
-                exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()] = true;
+                exploreMap[childrenCoords[i].getY()][childrenCoords[i].getX()] = true;
             }
         }
         return children;
@@ -468,7 +468,7 @@ public class Map implements Map2D, Serializable
 
     private ArrayList<Pixel2D> allDistancesRec(Pixel2D start, int[][] exploreMap, boolean cyclic)
     {
-        int distance = exploreMap[start.getX()][start.getY()];
+        int distance = exploreMap[start.getY()][start.getX()];
         ArrayList<Pixel2D> children = new ArrayList<Pixel2D>();
 
         Index2D[] childrenCoords = new Index2D[4];
@@ -479,10 +479,10 @@ public class Map implements Map2D, Serializable
 
         for (int i = 0; i < 4; i++)
         {
-            if (isInside(childrenCoords[i]) && exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()] == -2)
+            if (isInside(childrenCoords[i]) && exploreMap[childrenCoords[i].getY()][childrenCoords[i].getX()] == -2)
             {
                 children.add(childrenCoords[i]);
-                exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()] = distance + 1;
+                exploreMap[childrenCoords[i].getY()][childrenCoords[i].getX()] = distance + 1;
             }
         }
         return children;
