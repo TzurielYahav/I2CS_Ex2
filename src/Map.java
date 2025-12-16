@@ -297,12 +297,13 @@ public class Map implements Map2D, Serializable
 
         exploreQueue.add(p1);
         parentQueue.add(p1);
+        exploreMap[p1.getX()][p1.getY()] = true;
 
         int currentPixel = 0;
         boolean found = false;
         while (!found && currentPixel < exploreQueue.size())
         {
-            ArrayList<Pixel2D> children = shortestPathGetChildren(exploreQueue.get(currentPixel), p2, exploreMap, obsColor, cyclic);
+            ArrayList<Pixel2D> children = shortestPathGetChildren(exploreQueue.get(currentPixel), exploreMap, obsColor, cyclic);
             for (Pixel2D child : children)
             {
                 exploreQueue.add(child);
@@ -316,9 +317,7 @@ public class Map implements Map2D, Serializable
             currentPixel++;
         }
         if (!found)
-        {
             return null;
-        }
 
         ArrayList<Pixel2D> ansQueue = new ArrayList<Pixel2D>();
         ansQueue.add(exploreQueue.getLast());
@@ -446,33 +445,23 @@ public class Map implements Map2D, Serializable
         return new Index2D(x, y);
     }
 
-    private ArrayList<Pixel2D> shortestPathGetChildren(Pixel2D p1, Pixel2D p2, boolean[][] exploreMap, int obsColor, boolean cyclic)
+    private ArrayList<Pixel2D> shortestPathGetChildren(Pixel2D p1, boolean[][] exploreMap, int obsColor, boolean cyclic)
     {
-        int x = p1.getX();
-        int y = p1.getY();
-
         ArrayList<Pixel2D> children = new ArrayList<Pixel2D>();
-        exploreMap[x][y] = true;
 
-        Index2D up = isInBounds(x, y + 1, cyclic);
-        Index2D down = isInBounds(x, y - 1, cyclic);
-        Index2D left = isInBounds(x - 1, y, cyclic);
-        Index2D right = isInBounds(x + 1, y, cyclic);
-        if (isInside(up) && getPixel(up) != obsColor && !exploreMap[x][y + 1])
+        Index2D[] childrenCoords = new Index2D[4];
+        childrenCoords[0] = isInBounds(p1.getX(), p1.getY() + 1, cyclic);
+        childrenCoords[1] = isInBounds(p1.getX(), p1.getY() - 1, cyclic);
+        childrenCoords[2] = isInBounds(p1.getX() - 1, p1.getY(), cyclic);
+        childrenCoords[3] = isInBounds(p1.getX() + 1, p1.getY(), cyclic);
+
+        for (int i = 0; i < 4; i++)
         {
-            children.add(up);
-        }
-        if (isInside(down) && getPixel(down) != obsColor && !exploreMap[x][y - 1])
-        {
-            children.add(down);
-        }
-        if (isInside(left) && getPixel(left) != obsColor && !exploreMap[x - 1][y])
-        {
-            children.add(left);
-        }
-        if (isInside(right) && getPixel(right) != obsColor && !exploreMap[x + 1][y])
-        {
-            children.add(right);
+            if (isInside(childrenCoords[i]) && getPixel(childrenCoords[i]) != obsColor && !exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()])
+            {
+                children.add(childrenCoords[i]);
+                exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()] = true;
+            }
         }
         return children;
     }
