@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -53,18 +54,24 @@ public class Map implements Map2D, Serializable
 	@Override
 	public void init(int[][] arr)
     {
+        _map = new int[arr.length][arr[0].length];
         for (int i = 0; i < arr.length; i++)
         {
             if (arr[i].length != arr[0].length)
                 throw new IllegalArgumentException("Invalid array length");
+            _map[i] = arr[i].clone();
         }
-        _map = arr.clone();
 	}
 
 	@Override
 	public int[][] getMap()
     {
-		return _map.clone();
+        int[][] ans = new int[_map.length][_map[0].length];
+        for (int i = 0; i < ans.length; i++)
+        {
+            ans[i] = _map[i].clone();
+        }
+		return ans;
 	}
 
 	@Override
@@ -159,6 +166,8 @@ public class Map implements Map2D, Serializable
     @Override
     public void rescale(double sx, double sy)
     {
+        if (sx <= 0 || sy <= 0)
+            throw new IllegalArgumentException("sx or sy is not a valid scale");
         int[][] newMap = new int[(int) ((double)_map.length * sy)][(int) ((double)_map[0].length * sx)];
         for (int x = 0; x < newMap[0].length; x++)
         {
@@ -167,6 +176,7 @@ public class Map implements Map2D, Serializable
                 newMap[y][x] = _map[(int) (y / sy)][(int) (x / sx)];
             }
         }
+        _map = newMap;
     }
 
     @Override

@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapTest {
     /**
      */
-    private final int[][] _map_3_3 = {{0,1,0}, {1,0,1}, {0,1,0}};
+    private final int[][] _map_3x3_1 = {{0,1,0}, {1,0,1}, {0,1,0}};
     private final int[][] _map_4x4_1 = {{0,1,0,0}, {0,1,0,0}, {0,1,1,0}, {0,0,0,0}};
     private final int[][] _map_4x4_2 = {{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
     private final int[][] _map_4x4_3 = {{0,1,0,0}, {3,1,0,0}, {2,1,1,1}, {2,4,10,6}};
-    private Map2D _m0, _m1, _m2, _m3_3;
+    private Map2D _m0, _m1, _m2, _m3, _m3x3;
 
     @BeforeEach
     public void setup()
@@ -24,32 +24,110 @@ class MapTest {
         _m0 = new Map(_map_4x4_1);
         _m1 = new Map(_map_4x4_2);
         _m2 = new Map(_map_4x4_3);
-        _m3_3 = new Map(_map_3_3);
+        _m3 = new Map(4);
+        _m3x3 = new Map(_map_3x3_1);
     }
 
     @Test
     @Timeout(value = 1, unit = SECONDS)
-    void init() {
-        int[][] bigarr = new int [500][500];
-        _m1.init(bigarr);
-        assertEquals(bigarr.length, _m1.getWidth());
-        assertEquals(bigarr[0].length, _m1.getHeight());
-        Pixel2D p1 = new Index2D(3,2);
-        _m1.fill(p1,1, true);
-    }
+    void testInit()
+    {
+        Map2D m500 = new Map(4);
+        int[][] bigArr = new int [500][500];
+        m500.init(bigArr);
+        assertEquals(bigArr[0].length, m500.getWidth());
+        assertEquals(bigArr.length, m500.getHeight());
 
-    @Test
-    void testInit() {
-        _m0.init(_map_3_3);
-        _m1.init(_map_3_3);
+        m500.setPixel(0, 0, 1);
+        m500.setPixel(new Index2D(3,2), 1);
+        assertEquals(m500.getPixel(3, 2), m500.getPixel(0, 0));
+
+        _m0.init(_map_3x3_1);
+        _m1.init(_map_3x3_1);
         assertEquals(_m0, _m1);
     }
 
     @Test
+    void testIsInside()
+    {
+        Pixel2D p1 = new Index2D(-1,2);
+        Pixel2D p2 = new Index2D(2,0);
+        Pixel2D p3 = new Index2D(3,5);
+
+        assertFalse(_m0.isInside(p1));
+        assertTrue(_m0.isInside(p2));
+        assertFalse(_m0.isInside(p3));
+        assertThrowsExactly(NullPointerException.class, () -> _m0.isInside(null));
+    }
+
+    @Test
+    void testSameDimensions()
+    {
+        Pixel2D p1 = new Index2D(-1,2);
+        Pixel2D p2 = new Index2D(2,0);
+        Pixel2D p3 = new Index2D(3,5);
+
+        assertTrue(_m0.sameDimensions(_m1));
+        assertTrue(_m1.sameDimensions(_m0));
+        assertFalse(_m0.sameDimensions(_m3x3));
+        assertThrowsExactly(NullPointerException.class, () -> _m0.sameDimensions(null));
+    }
+
+    @Test
+    void testAddMap2D()
+    {
+        int[][] resArr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
+
+        _m2.init(resArr1);
+        _m3.addMap2D(_m2);
+
+        assertTrue(_m2.equals(_m3));
+        assertThrowsExactly(NullPointerException.class, () -> _m0.addMap2D(null));
+    }
+
+    @Test
+    void testMul()
+    {
+        int[][] resArr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
+
+        _m0.init(resArr1);
+        _m1.init(resArr1);
+        _m2.init(resArr1);
+        _m0.mul(5.5);
+        _m1.mul(0.5);
+        _m2.mul(5);
+
+        assertTrue(_m0.equals(_m2));
+        assertTrue(_m1.equals(_m3));
+    }
+
+    @Test
+    void testRescale()
+    {
+        int[][] resArr1 = {{1,1,1,1}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1}};
+        int[][] resArr2 = {{0,1,2,3}, {1,2,3,4}, {2,3,4,5}, {3,4,5,6}};
+
+        _m0.init(resArr2);
+        _m1.init(resArr2);
+        _m0.rescale(0.5,0.5);
+        _m1.rescale(2,1);
+
+        System.out.println(Arrays.deepToString(_m0.getMap()));
+        System.out.println(Arrays.deepToString(_m1.getMap()));
+        assertTrue(_m0.equals(_m2));
+        assertTrue(_m1.equals(_m3));
+        assertThrowsExactly(IllegalArgumentException.class, () -> _m2.rescale(2,0));
+
+        //_m1.fill(p1,1, true);
+    }
+
+
+
+    @Test
     void testEquals() {
         assertEquals(_m0,_m1);
-        _m0.init(_map_3_3);
-        _m1.init(_map_3_3);
+        _m0.init(_map_3x3_1);
+        _m1.init(_map_3x3_1);
         assertEquals(_m0,_m1);
     }
 
