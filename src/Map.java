@@ -285,18 +285,61 @@ public class Map implements Map2D, Serializable
     {
         if (!isInside(p1) || !isInside(p2))
             throw new RuntimeException("p1 or p2 is out of range");
+        if (getPixel(p1) == obsColor || getPixel(p2) == obsColor)
+            throw new RuntimeException("p1 or p2 is unreachable");
+        if (p1.equals(p2))
+            return new Pixel2D[]{p1, p2};
 
-        int[][] exploreMap = new int[_map.length][_map[0].length];
+        boolean[][] exploreMap = new boolean[_map.length][_map[0].length];
 
-		//Pixel2D[] ans = null;
+        ArrayList<Pixel2D> exploreQueue = new ArrayList<Pixel2D>();
+        ArrayList<Pixel2D> parentQueue = new ArrayList<Pixel2D>();
 
-        if (getPixel(p1) != obsColor &&  getPixel(p2) != obsColor)
+        exploreQueue.add(p1);
+        parentQueue.add(p1);
+
+        int currentPixel = 0;
+        boolean found = false;
+        while (!found && currentPixel < exploreQueue.size())
         {
-
-
+            ArrayList<Pixel2D> children = shortestPathGetChildren(exploreQueue.get(currentPixel), p2, exploreMap, obsColor, cyclic);
+            for (Pixel2D child : children)
+            {
+                exploreQueue.add(child);
+                parentQueue.add(exploreQueue.get(currentPixel));
+                if (child.equals(p2))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            currentPixel++;
         }
-		return null;
+        if (!found)
+        {
+            return null;
+        }
+
+        ArrayList<Pixel2D> ansQueue = new ArrayList<Pixel2D>();
+        ansQueue.add(exploreQueue.getLast());
+        ansQueue.add(parentQueue.getLast());
+        for (int i = exploreQueue.size() - 1; i > 0; i--)
+        {
+            if (exploreQueue.get(i).equals(ansQueue.getLast()))
+            {
+                ansQueue.add(exploreQueue.get(i));
+                ansQueue.add(parentQueue.get(i));
+            }
+        }
+        Pixel2D[] ans = new Pixel2D[ansQueue.size()];
+        for (int i = 0; i < ans.length; i++)
+        {
+            ans[i] = ansQueue.getLast();
+            ansQueue.removeLast();
+        }
+        return ans;
 	}
+
     @Override
     public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic)
     {
@@ -379,38 +422,34 @@ public class Map implements Map2D, Serializable
         return new Index2D(x, y);
     }
 
-    private ArrayList<Pixel2D> shortestPathRec(Pixel2D p1, Pixel2D p2, boolean[][] exploreMap, int obsColor, boolean cyclic)
+    private ArrayList<Pixel2D> shortestPathGetChildren(Pixel2D p1, Pixel2D p2, boolean[][] exploreMap, int obsColor, boolean cyclic)
     {
         int x = p1.getX();
         int y = p1.getY();
 
-        ArrayList<Pixel2D> exploreQueue = new ArrayList<Pixel2D>();
-        ArrayList<Pixel2D> parentQueue = new ArrayList<Pixel2D>();
+        ArrayList<Pixel2D> ans = new ArrayList<Pixel2D>();
+        exploreMap[x][y] = true;
 
-        Index2D currentP = new Index2D(x, y);
-        if (isInside(currentP) && getPixel(currentP) != obsColor && !exploreMap[x][y])
+        Index2D up = isInBounds(x, y + 1, cyclic);
+        Index2D down = isInBounds(x, y - 1, cyclic);
+        Index2D left = isInBounds(x - 1, y, cyclic);
+        Index2D right = isInBounds(x + 1, y, cyclic);
+        if (isInside(up) && getPixel(up) != obsColor && !exploreMap[x][y + 1])
         {
-            ArrayList<Pixel2D> ans = new ArrayList<Pixel2D>();
-            if (x == p2.getX() && y == p2.getY())
-            {
-                ans.add(new Index2D(x, y));
-                return ans;
-            }
-            exploreMap[x][y] = true;
-
-            int x = isInBounds(p1.getX(), _map.length, cyclic);
-            int y = isInBounds(p1.getY(), _map[0].length, cyclic);
-            if (isInBounds(x + 1, _map.length, cyclic) && isInBounds(y, _map[0].length, cyclic))
-            {
-
-            }
-            if (isInside(currentP) && getPixel(currentP) != obsColor && !exploreMap[x][y])
-            {
-
-            }
-
-
+            ans.add(up);
         }
-        return null;
+        if (isInside(down) && getPixel(down) != obsColor && !exploreMap[x][y - 1])
+        {
+            ans.add(down);
+        }
+        if (isInside(left) && getPixel(left) != obsColor && !exploreMap[x - 1][y])
+        {
+            ans.add(left);
+        }
+        if (isInside(right) && getPixel(right) != obsColor && !exploreMap[x + 1][y])
+        {
+            ans.add(right);
+        }
+        return ans;
     }
 }
