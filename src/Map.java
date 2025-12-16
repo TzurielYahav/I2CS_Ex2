@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.util.Arrays;
+
 /**
  * This class represents a 2D map (int[w][h]) as a "screen" or a raster matrix or maze over integers.
  * This is the main class needed to be implemented.
@@ -212,16 +214,41 @@ public class Map implements Map2D, Serializable
     @Override
     public void drawRect(Pixel2D p1, Pixel2D p2, int color)
     {
-
+        if (p1 == null || p2 == null)
+            throw new NullPointerException("Pixel2D p1 or p2 is null");
+        int x1 = Math.min(p1.getX(), p2.getX());
+        int x2 = Math.max(p1.getX(), p2.getX());
+        int y1 = Math.min(p1.getY(), p2.getY());
+        int y2 = Math.max(p1.getY(), p2.getY());
+        for (int i = x1; i <= x2; i++)
+        {
+            for (int j = y1; j <= y2; j++)
+            {
+                _map[i][j] = color;
+            }
+        }
     }
 
     @Override
     public boolean equals(Object ob)
     {
-        boolean ans = false;
-
-        return ans;
+        if (ob instanceof Map)
+        {
+            int[][] otherMap = ((Map) ob).getMap();
+            if (_map.length == otherMap.length &&  _map[0].length == otherMap[0].length)
+            {
+                int w = _map.length, h = _map[0].length;
+                for (int i = 0; i < w * h; i++)
+                {
+                    if (_map[i % h][i / h] !=  otherMap[i % h][i / h])
+                        return false;
+                }
+                return true;
+            }
+        }
+        return false;
     }
+
 	@Override
 	/** 
 	 * Fills this map with the new color (new_v) starting from p.
