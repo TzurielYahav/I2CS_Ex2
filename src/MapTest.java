@@ -81,7 +81,7 @@ class MapTest {
         _m2.init(arr1);
         _m3.addMap2D(_m2);
 
-        assertTrue(_m2.equals(_m3));
+        assertEquals(_m2, _m3);
         assertThrowsExactly(NullPointerException.class, () -> _m0.addMap2D(null));
     }
 
@@ -97,8 +97,8 @@ class MapTest {
         _m1.mul(0.5);
         _m2.mul(5);
 
-        assertTrue(_m0.equals(_m2));
-        assertTrue(_m1.equals(_m3));
+        assertEquals(_m0, _m2);
+        assertEquals(_m1, _m3);
     }
 
     @Test
@@ -117,28 +117,77 @@ class MapTest {
         _m1.rescale(2,1);
         _m2.rescale(1.5,1.5);
 
-        System.out.println(Arrays.deepToString(_m1.getMap()));
-        System.out.println(Arrays.deepToString(new Map(resArr2).getMap()));
-        assertTrue(_m0.equals(new Map(resArr1)));
-        assertTrue(_m1.equals(new Map(resArr2)));
-        assertTrue(_m2.equals(new Map(resArr3)));
+        assertEquals(_m0, new Map(resArr1));
+        assertEquals(_m1, new Map(resArr2));
+        assertEquals(_m2, new Map(resArr3));
         assertThrowsExactly(IllegalArgumentException.class, () -> _m2.rescale(2,0));
-
-        //_m1.fill(p1,1, true);
-    }
-
-
-
-    @Test
-    void testEquals() {
-        assertEquals(_m0,_m1);
-        _m0.init(_map_3x3_1);
-        _m1.init(_map_3x3_1);
-        assertEquals(_m0,_m1);
     }
 
     @Test
-    void testShortestPath() {
+    void testDraw()
+    {
+        // Circle
+        int[][] resArr1 = {{2,2,2,0}, {2,2,0,0}, {2,1,1,0}, {0,0,0,0}};
+        int[][] resArr2 = {{2,2,2,0}, {2,2,0,0}, {2,1,1,3}, {0,0,3,3}};
+        // Line
+        int[][] resArr3 = {{4,4,4,4}, {2,2,0,0}, {2,1,1,3}, {0,0,3,3}};
+        int[][] resArr4 = {{5,4,4,4}, {5,2,0,0}, {5,1,1,3}, {5,0,3,3}};
+        int[][] resArr5 = {{5,4,4,6}, {5,2,6,0}, {5,6,1,3}, {6,0,3,3}};
+        // Rect
+        int[][] resArr6 = {{7,7,7,7}, {5,2,6,0}, {5,6,1,3}, {6,0,3,3}};
+        int[][] resArr7 = {{8,7,7,7}, {8,2,6,0}, {8,6,1,3}, {8,0,3,3}};
+        int[][] resArr8 = {{9,9,9,9}, {9,9,9,9}, {9,9,9,9}, {9,9,9,9}};
+
+        _m0.drawCircle(new Index2D(0,0), 2, 2);
+        assertEquals(_m0,new Map(resArr1));
+        _m0.drawCircle(new Index2D(4,4), 2.5, 3);
+        assertEquals(_m0,new Map(resArr2));
+
+        _m0.drawLine(new Index2D(0,0), new Index2D(3,0), 4);
+        assertEquals(_m0,new Map(resArr3));
+        _m0.drawLine(new Index2D(0,3), new Index2D(0,0), 5);
+        assertEquals(_m0,new Map(resArr4));
+        _m0.drawLine(new Index2D(0,3), new Index2D(3,0), 6);
+        assertEquals(_m0,new Map(resArr5));
+        assertThrowsExactly(RuntimeException.class, () -> _m0.drawLine(new Index2D(4,4), new Index2D(0,0), 7));
+
+        _m0.drawRect(new Index2D(0,0), new Index2D(3,0), 7);
+        assertEquals(_m0,new Map(resArr6));
+        _m0.drawRect(new Index2D(0,3), new Index2D(0,0), 8);
+        assertEquals(_m0,new Map(resArr7));
+        _m0.drawRect(new Index2D(0,3), new Index2D(3,0), 9);
+        assertEquals(_m0,new Map(resArr8));
+        assertThrowsExactly(RuntimeException.class, () -> _m0.drawRect(new Index2D(4,4), new Index2D(0,0), 7));
+    }
+
+    @Test
+    void testEquals()
+    {
+        assertEquals(_m3,_m1);
+        assertNotEquals(_m0,_m1);
+        assertNotEquals(null, _m0);
+    }
+
+    @Test
+    void testFill()
+    {
+        int[][] arr1 = {{1,5,1,1}, {1,1,0,0}, {1,1,1,0}, {0,1,3,0}};
+
+        int[][] resArr1 = {{2,5,1,1}, {2,2,0,0}, {2,2,2,0}, {0,2,3,0}};
+        int[][] resArr2 = {{2,5,2,2}, {2,2,0,0}, {2,2,2,0}, {0,2,3,0}};
+
+        _m1.init(arr1);
+        _m2.init(arr1);
+        _m1.fill(new Index2D(0,0),2, false);
+        _m2.fill(new Index2D(0,0),2, true);
+
+        assertEquals(_m1,new Map(resArr1));
+        assertEquals(_m2,new Map(resArr2));
+    }
+
+    @Test
+    void testShortestPath()
+    {
         Pixel2D[] resArr1 = {new Index2D(0,0),new Index2D(0,1),new Index2D(0,2),new Index2D(0,3), new Index2D(1,3)
                 ,new Index2D(2,3),new Index2D(3,3),new Index2D(3,2),new Index2D(3,1),new Index2D(3,0)};
         Pixel2D[] resArr2 = {new Index2D(0,0),new Index2D(0,1),new Index2D(0,2),new Index2D(0,3), new Index2D(1,3)
@@ -153,7 +202,8 @@ class MapTest {
     }
 
     @Test
-    void testAllDistance() {
+    void testAllDistance()
+    {
         int[][] resArr1 = {{0,-1,10,9}, {1,-1,9,8}, {2,-1,-1,7}, {3,4,5,6}};
         int[][] resArr2 = {{0,1,2,3}, {1,2,3,4}, {2,3,4,5}, {3,4,5,6}};
         int[][] resArr3 = {{0,-1,-2,-2}, {1,-1,-2,-2}, {2,-1,-1,-1}, {3,4,5,6}};

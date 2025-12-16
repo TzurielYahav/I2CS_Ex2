@@ -47,7 +47,7 @@ public class Map implements Map2D, Serializable
         _map = new int[h][w];
         for (int i = 0; i < w * h; i++)
         {
-            _map[i / h][i % h] = v;
+            _map[i / w][i % w] = v;
         }
 	}
 
@@ -148,7 +148,7 @@ public class Map implements Map2D, Serializable
             int w = _map[0].length, h = _map.length;
             for (int i = 0; i < w * h; i++)
             {
-                _map[i / h][i % h] += otherMap[i / h][i % h];
+                _map[i / w][i % w] += otherMap[i / w][i % w];
             }
         }
     }
@@ -159,7 +159,7 @@ public class Map implements Map2D, Serializable
         int w = _map[0].length, h = _map.length;
         for (int i = 0; i < w * h; i++)
         {
-            _map[i / h][i % h] = (int) ((double)_map[i / h][i % h] * scalar);
+            _map[i / w][i % w] = (int) ((double)_map[i / w][i % w] * scalar);
         }
     }
 
@@ -189,9 +189,9 @@ public class Map implements Map2D, Serializable
         int w = _map[0].length, h = _map.length;
         int startX = (int) ((double)center.getX() - rad);
         int startY = (int) ((double)center.getY() - rad);
-        for (int i = 0; i < rad; i++)
+        for (int i = 0; i <= 2 * rad; i++)
         {
-            for (int j = 0; j < rad; j++)
+            for (int j = 0; j <= 2 * rad; j++)
             {
                 if (isInside(new Index2D(startX + i, startY + j)))
                     if (center.distance2D(new Index2D(startX + i, startY + j)) <= rad)
@@ -221,7 +221,7 @@ public class Map implements Map2D, Serializable
         }
         else
         {
-            if (p1.getX() <= p2.getX())
+            if (p1.getY() <= p2.getY())
                 DrawLineY(p1.getX(), p1.getY(), p2.getX(), p2.getY(), color);
             else
                 DrawLineY(p2.getX(), p2.getY(), p1.getX(), p1.getY(), color);
@@ -257,7 +257,7 @@ public class Map implements Map2D, Serializable
                 int w = _map[0].length, h = _map.length;
                 for (int i = 0; i < w * h; i++)
                 {
-                    if (_map[i / h][i % h] !=  otherMap[i / h][i % h])
+                    if (_map[i / w][i % w] !=  otherMap[i / w][i % w])
                         return false;
                 }
                 return true;
