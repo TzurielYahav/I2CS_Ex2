@@ -354,11 +354,20 @@ public class Map implements Map2D, Serializable
             for (int y = 0; y < _map[0].length; y++)
             {
                 if (_map[x][y] == obsColor)
-                    exploreMap[x][y] = -1;
+                    exploreMap[x][y] = -1; // obstacle color
+                else
+                    exploreMap[x][y] = -2; // Not checked color
             }
         }
 
-        allDistancesRec(start, 0, exploreMap, cyclic);
+        ArrayList<Pixel2D> exploreQueue = new ArrayList<Pixel2D>();
+        exploreMap[start.getX()][start.getY()] =  0;
+        exploreQueue.add(start);
+        while (!exploreQueue.isEmpty())
+        {
+            exploreQueue.addAll(allDistancesRec(exploreQueue.getFirst(), exploreMap, cyclic));
+            exploreQueue.removeFirst();
+        }
         return new Map(exploreMap);
     }
 
@@ -442,7 +451,7 @@ public class Map implements Map2D, Serializable
         int x = p1.getX();
         int y = p1.getY();
 
-        ArrayList<Pixel2D> ans = new ArrayList<Pixel2D>();
+        ArrayList<Pixel2D> children = new ArrayList<Pixel2D>();
         exploreMap[x][y] = true;
 
         Index2D up = isInBounds(x, y + 1, cyclic);
@@ -451,26 +460,27 @@ public class Map implements Map2D, Serializable
         Index2D right = isInBounds(x + 1, y, cyclic);
         if (isInside(up) && getPixel(up) != obsColor && !exploreMap[x][y + 1])
         {
-            ans.add(up);
+            children.add(up);
         }
         if (isInside(down) && getPixel(down) != obsColor && !exploreMap[x][y - 1])
         {
-            ans.add(down);
+            children.add(down);
         }
         if (isInside(left) && getPixel(left) != obsColor && !exploreMap[x - 1][y])
         {
-            ans.add(left);
+            children.add(left);
         }
         if (isInside(right) && getPixel(right) != obsColor && !exploreMap[x + 1][y])
         {
-            ans.add(right);
+            children.add(right);
         }
-        return ans;
+        return children;
     }
 
-    private void allDistancesRec(Pixel2D start,int distance, int[][] exploreMap, boolean cyclic)
+    private ArrayList<Pixel2D> allDistancesRec(Pixel2D start, int[][] exploreMap, boolean cyclic)
     {
-        exploreMap[start.getX()][start.getY()] =  distance;
+        int distance = exploreMap[start.getX()][start.getY()];
+        ArrayList<Pixel2D> children = new ArrayList<Pixel2D>();
 
         int x = start.getX();
         int y = start.getY();
@@ -479,21 +489,26 @@ public class Map implements Map2D, Serializable
         Index2D down = isInBounds(x, y - 1, cyclic);
         Index2D left = isInBounds(x - 1, y, cyclic);
         Index2D right = isInBounds(x + 1, y, cyclic);
-        if (isInside(up) && exploreMap[x][y + 1] == 0)
+        if (isInside(up) && exploreMap[x][y + 1] == -2)
         {
-            allDistancesRec(up, distance + 1, exploreMap, cyclic);
+            children.add(up);
+            exploreMap[up.getX()][up.getY()] = distance + 1;
         }
-        if (isInside(down) && exploreMap[x][y - 1] == 0)
+        if (isInside(down) && exploreMap[x][y - 1] == -2)
         {
-            allDistancesRec(down, distance + 1, exploreMap, cyclic);
+            children.add(down);
+            exploreMap[down.getX()][down.getY()] = distance + 1;
         }
-        if (isInside(left) && exploreMap[x - 1][y] == 0)
+        if (isInside(left) && exploreMap[x - 1][y] == -2)
         {
-            allDistancesRec(left, distance + 1, exploreMap, cyclic);
+            children.add(left);
+            exploreMap[left.getX()][left.getY()] = distance + 1;
         }
-        if (isInside(right) && exploreMap[x + 1][y] == 0)
+        if (isInside(right) && exploreMap[x + 1][y] == -2)
         {
-            allDistancesRec(right, distance + 1, exploreMap, cyclic);
+            children.add(right);
+            exploreMap[right.getX()][right.getY()] = distance + 1;
         }
+        return children;
     }
 }
