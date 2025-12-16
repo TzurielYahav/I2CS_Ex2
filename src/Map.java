@@ -271,8 +271,16 @@ public class Map implements Map2D, Serializable
 	 */
 	public int fill(Pixel2D xy, int new_v,  boolean cyclic)
     {
-		int ans = -1;
+        int ans = 0;
+		if (xy == null)
+            throw new NullPointerException("Pixel2D object is null");
+        if (!isInside(xy))
+            throw new RuntimeException("xy is out of range");
+        int oldColor = _map[xy.getX()][xy.getY()];
+        if (oldColor != new_v)
+        {
 
+        }
 		return ans;
 	}
 
@@ -318,4 +326,8 @@ public class Map implements Map2D, Serializable
         }
     }
 
+    private int fillPixels(Pixel2D p1, int oldColor, int color)
+    {
+
+    }
 }
