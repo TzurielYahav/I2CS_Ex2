@@ -91,7 +91,16 @@ class MapTest {
         assertEquals(res4, _m2.allDistance(new Index2D(0, 0), 1, true));
     }
 
-    boolean equalArray(Pixel2D[] arr1, Pixel2D[] arr2) {
+    boolean equalArray(Pixel2D[] arr1, Pixel2D[] arr2)
+    {
+        if(arr1 == null || arr2 == null)
+        {
+            if (arr1 == null && arr2 == null)
+            {
+                return true;
+            }
+            return false;
+        }
         if (arr1.length != arr2.length)
         {
             return false;
@@ -103,5 +112,6 @@ class MapTest {
                 return false;
             }
         }
+        return true;
     }
 }
