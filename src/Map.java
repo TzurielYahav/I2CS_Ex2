@@ -50,12 +50,7 @@ public class Map implements Map2D, Serializable
 	@Override
 	public void init(int[][] arr)
     {
-        _map = new int[arr.length][arr[0].length];
-        int w = arr.length, h = arr[0].length;
-        for (int i = 0; i < w * h; i++)
-        {
-            _map[i % h][i / h] = arr[i % h][i / h];
-        }
+        _map = arr.clone();
 	}
 
 	@Override
