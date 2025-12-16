@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * This class represents a 2D map (int[w][h]) as a "screen" or a raster matrix or maze over integers.
@@ -90,8 +91,6 @@ public class Map implements Map2D, Serializable
 	@Override
 	public int getPixel(Pixel2D p)
     {
-        if (p == null)
-            throw new NullPointerException("Pixel2D p is null");
         if (!isInside(p))
             throw new IllegalArgumentException("Pixel2D is not inside the map");
         return _map[p.getX()][p.getY()];
@@ -108,8 +107,6 @@ public class Map implements Map2D, Serializable
 	@Override
 	public void setPixel(Pixel2D p, int v)
     {
-        if (p == null)
-            throw new NullPointerException("Pixel2D p is null");
         if (!isInside(p))
             throw new IllegalArgumentException("Pixel2D is not inside the map");
         _map[p.getX()][p.getY()] = v;
@@ -189,8 +186,9 @@ public class Map implements Map2D, Serializable
         {
             for (int j = 0; j < rad; j++)
             {
-                if (center.distance2D(new Index2D(startX + i, startY + i)) <= rad)
-                    _map[startX + i][startY + i] = color;
+                if (isInside(new Index2D(startX + i, startY + j)))
+                    if (center.distance2D(new Index2D(startX + i, startY + j)) <= rad)
+                        _map[startX + i][startY + j] = color;
             }
         }
     }
@@ -198,8 +196,6 @@ public class Map implements Map2D, Serializable
     @Override
     public void drawLine(Pixel2D p1, Pixel2D p2, int color)
     {
-        if (p1 == null || p2 == null)
-            throw new NullPointerException("Pixel2D p1 or p2 is null");
         if (!isInside(p1) || !isInside(p2))
             throw new RuntimeException("p1 or p2 is out of range");
         if (p1.equals(p2))
@@ -228,8 +224,8 @@ public class Map implements Map2D, Serializable
     @Override
     public void drawRect(Pixel2D p1, Pixel2D p2, int color)
     {
-        if (p1 == null || p2 == null)
-            throw new NullPointerException("Pixel2D p1 or p2 is null");
+        if (!isInside(p1) || !isInside(p2))
+            throw new RuntimeException("p1 or p2 is out of range");
         int x1 = Math.min(p1.getX(), p2.getX());
         int x2 = Math.max(p1.getX(), p2.getX());
         int y1 = Math.min(p1.getY(), p2.getY());
@@ -270,15 +266,13 @@ public class Map implements Map2D, Serializable
 	 */
 	public int fill(Pixel2D xy, int new_v,  boolean cyclic)
     {
-        int ans = 0;
-		if (xy == null)
-            throw new NullPointerException("Pixel2D object is null");
         if (!isInside(xy))
             throw new RuntimeException("xy is out of range");
+        int ans = 0;
         int oldColor = _map[xy.getX()][xy.getY()];
         if (oldColor != new_v)
         {
-            ans += fillPixels(xy, oldColor, new_v, cyclic);
+            ans = fillPixels(xy, oldColor, new_v, cyclic);
         }
 		return ans;
 	}
@@ -290,9 +284,19 @@ public class Map implements Map2D, Serializable
 	 */
 	public Pixel2D[] shortestPath(Pixel2D p1, Pixel2D p2, int obsColor, boolean cyclic)
     {
-		Pixel2D[] ans = null;  // the result.
+        if (!isInside(p1) || !isInside(p2))
+            throw new RuntimeException("p1 or p2 is out of range");
 
-		return ans;
+        int[][] exploreMap = new int[_map.length][_map[0].length];
+
+		//Pixel2D[] ans = null;
+
+        if (getPixel(p1) != obsColor &&  getPixel(p2) != obsColor)
+        {
+
+
+        }
+		return null;
 	}
     @Override
     public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic)
@@ -332,7 +336,7 @@ public class Map implements Map2D, Serializable
         int y = isInBounds(p1.getY(), _map[0].length, cyclic);
 
         Index2D currentP = new Index2D(x, y);
-        if (getPixel(currentP) == oldColor)
+        if (isInside(currentP) && getPixel(currentP) == oldColor)
         {
             ans = 1;
             setPixel(currentP, color);
@@ -361,5 +365,23 @@ public class Map implements Map2D, Serializable
                 return -1;
         }
         return index;
+    }
+
+    private Pixel2D[] shortestPathRec(Pixel2D p1, Pixel2D p2, boolean[][] exploreMap, int obsColor, boolean cyclic)
+    {
+        int x = isInBounds(p1.getX(), _map.length, cyclic);
+        int y = isInBounds(p1.getY(), _map[0].length, cyclic);
+
+        ArrayList<Pixel2D> ans = new ArrayList<Pixel2D>();
+        Index2D currentP = new Index2D(x, y);
+        if (isInside(currentP) && getPixel(currentP) != obsColor && !exploreMap[x][y])
+        {
+            ans.add(currentP);
+            exploreMap[x][y] = true;
+
+
+
+        }
+        return null;
     }
 }
