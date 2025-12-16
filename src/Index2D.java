@@ -8,7 +8,6 @@ public class Index2D implements Pixel2D
 
     public Index2D(int w, int h)
     {
-        isValid(w,h);
         _x = w;
         _y = h;
     }
@@ -17,7 +16,6 @@ public class Index2D implements Pixel2D
     {
         if (other == null)
             throw new NullPointerException("Pixel2D object is null");
-        isValid(other.getX(),other.getY());
         _x = other.getX();
         _y = other.getY();
     }
@@ -38,7 +36,6 @@ public class Index2D implements Pixel2D
     {
         if (p2 == null)
             throw new NullPointerException("Pixel2D p2 is null");
-        isValid(p2.getX(),p2.getY());
         return Math.sqrt(Math.pow(_x-p2.getX(), 2) + Math.pow(_y-p2.getY(), 2));
     }
 
@@ -56,11 +53,5 @@ public class Index2D implements Pixel2D
             return ((Index2D) p).getX() == _x && ((Index2D) p).getY() == _y;
         }
         return false;
-    }
-
-    private void isValid(int x, int y)
-    {
-        if (x < 0 || y < 0)
-            throw new IndexOutOfBoundsException("x or y is out of bounds");
     }
 }

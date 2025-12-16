@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * This class represents a 2D map (int[w][h]) as a "screen" or a raster matrix or maze over integers.
@@ -279,7 +278,7 @@ public class Map implements Map2D, Serializable
         int oldColor = _map[xy.getX()][xy.getY()];
         if (oldColor != new_v)
         {
-
+            ans += fillPixels(xy, oldColor, new_v, cyclic);
         }
 		return ans;
 	}
@@ -326,8 +325,41 @@ public class Map implements Map2D, Serializable
         }
     }
 
-    private int fillPixels(Pixel2D p1, int oldColor, int color)
+    private int fillPixels(Pixel2D p1, int oldColor, int color, boolean cyclic)
     {
+        int ans = 0;
+        int x = isInBounds(p1.getX(), _map.length, cyclic);
+        int y = isInBounds(p1.getY(), _map[0].length, cyclic);
 
+        Index2D currentP = new Index2D(x, y);
+        if (getPixel(currentP) == oldColor)
+        {
+            ans = 1;
+            setPixel(currentP, color);
+            ans += fillPixels(new Index2D(x + 1, y), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(x, y + 1), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(x - 1, y), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(x, y - 1), oldColor, color, cyclic);
+        }
+        return ans;
+    }
+
+    private int isInBounds(int index, int limit, boolean cyclic)
+    {
+        if (index >= limit)
+        {
+            if (cyclic)
+                return 0;
+            else
+                return -1;
+        }
+        else if (index < 0)
+        {
+            if (cyclic)
+                return limit - 1;
+            else
+                return -1;
+        }
+        return index;
     }
 }
