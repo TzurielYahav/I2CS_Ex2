@@ -12,7 +12,6 @@ public class Map implements Map2D, Serializable
 {
     private int[][] _map;
 
-
 	/**
 	 * Constructs a w * h 2D raster map with an init value v.
 	 * @param w
@@ -332,53 +331,83 @@ public class Map implements Map2D, Serializable
     private int fillPixels(Pixel2D p1, int oldColor, int color, boolean cyclic)
     {
         int ans = 0;
-        int x = isInBounds(p1.getX(), _map.length, cyclic);
-        int y = isInBounds(p1.getY(), _map[0].length, cyclic);
 
-        Index2D currentP = new Index2D(x, y);
+        Index2D currentP = isInBounds(p1.getX(), p1.getY(), cyclic);
         if (isInside(currentP) && getPixel(currentP) == oldColor)
         {
             ans = 1;
             setPixel(currentP, color);
-            ans += fillPixels(new Index2D(x + 1, y), oldColor, color, cyclic);
-            ans += fillPixels(new Index2D(x, y + 1), oldColor, color, cyclic);
-            ans += fillPixels(new Index2D(x - 1, y), oldColor, color, cyclic);
-            ans += fillPixels(new Index2D(x, y - 1), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(currentP.getX() + 1, currentP.getY()), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(currentP.getX(), currentP.getY() + 1), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(currentP.getX() - 1, currentP.getY()), oldColor, color, cyclic);
+            ans += fillPixels(new Index2D(currentP.getX(), currentP.getY() - 1), oldColor, color, cyclic);
         }
         return ans;
     }
 
-    private int isInBounds(int index, int limit, boolean cyclic)
+    private Index2D isInBounds(int x, int y, boolean cyclic)
     {
-        if (index >= limit)
+        if (x >= _map.length)
         {
             if (cyclic)
-                return 0;
+                x = 0;
             else
-                return -1;
+                x = -1;
         }
-        else if (index < 0)
+        else if (x < 0)
         {
             if (cyclic)
-                return limit - 1;
+                x = _map.length - 1;
             else
-                return -1;
+                x = -1;
         }
-        return index;
+
+        if (y >= _map[0].length)
+        {
+            if (cyclic)
+                y = 0;
+            else
+                y = -1;
+        }
+        else if (y < 0)
+        {
+            if (cyclic)
+                y = _map[0].length - 1;
+            else
+                y = -1;
+        }
+        return new Index2D(x, y);
     }
 
-    private Pixel2D[] shortestPathRec(Pixel2D p1, Pixel2D p2, boolean[][] exploreMap, int obsColor, boolean cyclic)
+    private ArrayList<Pixel2D> shortestPathRec(Pixel2D p1, Pixel2D p2, boolean[][] exploreMap, int obsColor, boolean cyclic)
     {
-        int x = isInBounds(p1.getX(), _map.length, cyclic);
-        int y = isInBounds(p1.getY(), _map[0].length, cyclic);
+        int x = p1.getX();
+        int y = p1.getY();
 
-        ArrayList<Pixel2D> ans = new ArrayList<Pixel2D>();
+        ArrayList<Pixel2D> exploreQueue = new ArrayList<Pixel2D>();
+        ArrayList<Pixel2D> parentQueue = new ArrayList<Pixel2D>();
+
         Index2D currentP = new Index2D(x, y);
         if (isInside(currentP) && getPixel(currentP) != obsColor && !exploreMap[x][y])
         {
-            ans.add(currentP);
+            ArrayList<Pixel2D> ans = new ArrayList<Pixel2D>();
+            if (x == p2.getX() && y == p2.getY())
+            {
+                ans.add(new Index2D(x, y));
+                return ans;
+            }
             exploreMap[x][y] = true;
 
+            int x = isInBounds(p1.getX(), _map.length, cyclic);
+            int y = isInBounds(p1.getY(), _map[0].length, cyclic);
+            if (isInBounds(x + 1, _map.length, cyclic) && isInBounds(y, _map[0].length, cyclic))
+            {
+
+            }
+            if (isInside(currentP) && getPixel(currentP) != obsColor && !exploreMap[x][y])
+            {
+
+            }
 
 
         }
