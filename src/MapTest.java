@@ -51,11 +51,30 @@ class MapTest {
     }
 
     @Test
+    void testShortestPath() {
+        Pixel2D[] resArr1 = {new Index2D(0,0),new Index2D(0,1),new Index2D(0,2),new Index2D(0,3), new Index2D(1,3)
+                ,new Index2D(2,3),new Index2D(3,3),new Index2D(3,2),new Index2D(3,1),new Index2D(3,0)};
+        Pixel2D[] resArr2 = {new Index2D(0,0),new Index2D(0,1),new Index2D(1,1),new Index2D(1,2), new Index2D(2,2)
+                ,new Index2D(2,3),new Index2D(3,3)};
+        Pixel2D[] resArr3 = null;
+        Pixel2D[] resArr4 = {new Index2D(0,0),new Index2D(3,0),new Index2D(2,0)};
+
+        _m0 = new Map(_map_4x4_1);
+        _m1 = new Map(_map_4x4_2);
+        _m2 = new Map(_map_4x4_3);
+
+        assertEquals(resArr1, _m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false));
+        assertEquals(resArr2, _m1.shortestPath(new Index2D(0, 0), new Index2D(3, 3), 1, false));
+        assertEquals(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, false));
+        assertEquals(resArr4, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, true));
+    }
+
+    @Test
     void testAllDistance() {
         int[][] resArr1 = {{0,-1,10,9}, {1,-1,9,8}, {2,-1,-1,7}, {3,4,5,6}};
         int[][] resArr2 = {{0,1,2,3}, {1,2,3,4}, {2,3,4,5}, {3,4,5,6}};
         int[][] resArr3 = {{0,-1,-2,-2}, {1,-1,-2,-2}, {2,-1,-1,-1}, {3,4,5,6}};
-        int[][] resArr4 = {{0,-1,2,1}, {1,-1,3,2}, {2,-1,-1,-1}, {3,4,5,6}};
+        int[][] resArr4 = {{0, -1, 2, 1}, {1, -1, 3, 2}, {2, -1, -1, -1}, {1, 2, 3, 2}};
 
         _m0 = new Map(_map_4x4_1);
         _m1 = new Map(_map_4x4_2);
@@ -70,5 +89,19 @@ class MapTest {
         assertEquals(res2, _m1.allDistance(new Index2D(0, 0), 1, false));
         assertEquals(res3, _m2.allDistance(new Index2D(0, 0), 1, false));
         assertEquals(res4, _m2.allDistance(new Index2D(0, 0), 1, true));
+    }
+
+    boolean equalArray(Pixel2D[] arr1, Pixel2D[] arr2) {
+        if (arr1.length != arr2.length)
+        {
+            return false;
+        }
+        for (int i = 0; i < arr1.length; i++)
+        {
+            if (!arr1[i].equals(arr2[i]))
+            {
+                return false;
+            }
+        }
     }
 }
