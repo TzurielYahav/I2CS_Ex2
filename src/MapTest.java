@@ -2,8 +2,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import java.util.Arrays;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.*;
 /**
@@ -224,11 +222,7 @@ class MapTest {
     {
         if(arr1 == null || arr2 == null)
         {
-            if (arr1 == null && arr2 == null)
-            {
-                return true;
-            }
-            return false;
+            return arr1 == null && arr2 == null;
         }
         if (arr1.length != arr2.length)
         {
