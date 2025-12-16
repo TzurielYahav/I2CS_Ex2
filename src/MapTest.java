@@ -12,15 +12,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapTest {
     /**
      */
-    private int[][] _map_3_3 = {{0,1,0}, {1,0,1}, {0,1,0}};
-    private int[][] _map_4x4_1 = {{0,1,0,0}, {0,1,0,0}, {0,1,1,0}, {0,0,0,0}};
-    private int[][] _map_4x4_2 = {{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
-    private int[][] _map_4x4_3 = {{0,1,0,0}, {3,1,0,0}, {2,1,1,1}, {2,4,10,6}};
+    private final int[][] _map_3_3 = {{0,1,0}, {1,0,1}, {0,1,0}};
+    private final int[][] _map_4x4_1 = {{0,1,0,0}, {0,1,0,0}, {0,1,1,0}, {0,0,0,0}};
+    private final int[][] _map_4x4_2 = {{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
+    private final int[][] _map_4x4_3 = {{0,1,0,0}, {3,1,0,0}, {2,1,1,1}, {2,4,10,6}};
     private Map2D _m0, _m1, _m2, _m3_3;
 
     @BeforeEach
     public void setup()
     {
+        _m0 = new Map(_map_4x4_1);
+        _m1 = new Map(_map_4x4_2);
+        _m2 = new Map(_map_4x4_3);
         _m3_3 = new Map(_map_3_3);
     }
 
@@ -59,10 +62,6 @@ class MapTest {
         Pixel2D[] resArr3 = null;
         Pixel2D[] resArr4 = {new Index2D(0,0),new Index2D(3,0)};
 
-        _m0 = new Map(_map_4x4_1);
-        _m1 = new Map(_map_4x4_2);
-        _m2 = new Map(_map_4x4_3);
-
         assertTrue(isEqualArray(resArr1, _m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
         assertTrue(isEqualArray(resArr2, _m1.shortestPath(new Index2D(0, 0), new Index2D(3, 3), 1, false)));
         assertTrue(isEqualArray(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
@@ -75,10 +74,6 @@ class MapTest {
         int[][] resArr2 = {{0,1,2,3}, {1,2,3,4}, {2,3,4,5}, {3,4,5,6}};
         int[][] resArr3 = {{0,-1,-2,-2}, {1,-1,-2,-2}, {2,-1,-1,-1}, {3,4,5,6}};
         int[][] resArr4 = {{0, -1, 2, 1}, {1, -1, 3, 2}, {2, -1, -1, -1}, {1, 2, 3, 2}};
-
-        _m0 = new Map(_map_4x4_1);
-        _m1 = new Map(_map_4x4_2);
-        _m2 = new Map(_map_4x4_3);
 
         Map2D res1 = new Map(resArr1);
         Map2D res2 = new Map(resArr2);
