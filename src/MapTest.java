@@ -60,10 +60,15 @@ class MapTest {
         _m0 = new Map(_map_4x4_1);
         _m1 = new Map(_map_4x4_2);
         _m2 = new Map(_map_4x4_3);
-        System.out.println(Arrays.deepToString(_m0.allDistance(new Index2D(0, 0), 1, false).getMap()));
-        assertEquals(_m0.allDistance(new Index2D(0,0), 1, false).getMap(),resArr1);
-        assertEquals(_m1.allDistance(new Index2D(0,0), 1, false).getMap(),resArr2);
-        assertEquals(_m2.allDistance(new Index2D(0,0), 1, false).getMap(),resArr3);
-        assertEquals(_m2.allDistance(new Index2D(0,0), 1, false).getMap(),resArr3);
+
+        Map2D res1 = new Map(resArr1);
+        Map2D res2 = new Map(resArr2);
+        Map2D res3 = new Map(resArr3);
+        Map2D res4 = new Map(resArr4);
+
+        assertEquals(res1, _m0.allDistance(new Index2D(0, 0), 1, false));
+        assertEquals(res2, _m1.allDistance(new Index2D(0, 0), 1, false));
+        assertEquals(res3, _m2.allDistance(new Index2D(0, 0), 1, false));
+        assertEquals(res4, _m2.allDistance(new Index2D(0, 0), 1, true));
     }
 }

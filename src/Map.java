@@ -482,32 +482,19 @@ public class Map implements Map2D, Serializable
         int distance = exploreMap[start.getX()][start.getY()];
         ArrayList<Pixel2D> children = new ArrayList<Pixel2D>();
 
-        int x = start.getX();
-        int y = start.getY();
+        Index2D[] childrenCoords = new Index2D[4];
+        childrenCoords[0] = isInBounds(start.getX(), start.getY() + 1, cyclic);
+        childrenCoords[1] = isInBounds(start.getX(), start.getY() - 1, cyclic);
+        childrenCoords[2] = isInBounds(start.getX() - 1, start.getY(), cyclic);
+        childrenCoords[3] = isInBounds(start.getX() + 1, start.getY(), cyclic);
 
-        Index2D up = isInBounds(x, y + 1, cyclic);
-        Index2D down = isInBounds(x, y - 1, cyclic);
-        Index2D left = isInBounds(x - 1, y, cyclic);
-        Index2D right = isInBounds(x + 1, y, cyclic);
-        if (isInside(up) && exploreMap[x][y + 1] == -2)
+        for (int i = 0; i < 4; i++)
         {
-            children.add(up);
-            exploreMap[up.getX()][up.getY()] = distance + 1;
-        }
-        if (isInside(down) && exploreMap[x][y - 1] == -2)
-        {
-            children.add(down);
-            exploreMap[down.getX()][down.getY()] = distance + 1;
-        }
-        if (isInside(left) && exploreMap[x - 1][y] == -2)
-        {
-            children.add(left);
-            exploreMap[left.getX()][left.getY()] = distance + 1;
-        }
-        if (isInside(right) && exploreMap[x + 1][y] == -2)
-        {
-            children.add(right);
-            exploreMap[right.getX()][right.getY()] = distance + 1;
+            if (isInside(childrenCoords[i]) && exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()] == -2)
+            {
+                children.add(childrenCoords[i]);
+                exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()] = distance + 1;
+            }
         }
         return children;
     }
