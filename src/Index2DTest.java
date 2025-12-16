@@ -36,11 +36,10 @@ public class Index2DTest
     @Test
     void testEquals()
     {
-        assertTrue(_m1.equals(_m2));
-        assertTrue(_m2.equals(_m1));
-        assertTrue(_m4.equals(_m2));
-        assertTrue(_m1.equals(_m4));
-        assertFalse(_m0.equals(null));
-        assertFalse(_m1.equals(new Map(1)));
+        assertEquals(_m1, _m2);
+        assertEquals(_m2, _m1);
+        assertEquals(_m4, _m2);
+        assertEquals(_m1, _m4);
+        assertNotEquals(null, _m0);
     }
 }

@@ -7,8 +7,10 @@
  *
  *
  */
-public class Ex2_GUI {
-    public static void drawMap(Map2D map) {
+public class Ex2_GUI
+{
+    public static void drawMap(Map2D map)
+    {
         //
     }
 
@@ -16,7 +18,8 @@ public class Ex2_GUI {
      * @param mapFileName
      * @return
      */
-    public static Map2D loadMap(String mapFileName) {
+    public static Map2D loadMap(String mapFileName)
+    {
         Map2D ans = null;
 
         return ans;
@@ -27,11 +30,14 @@ public class Ex2_GUI {
      * @param map
      * @param mapFileName
      */
-    public static void saveMap(Map2D map, String mapFileName) {
+    public static void saveMap(Map2D map, String mapFileName)
+    {
 
 
     }
-    public static void main(String[] a) {
+
+    public static void main(String[] a)
+    {
         String mapFile = "map.txt";
         Map2D map = loadMap(mapFile);
         drawMap(map);
