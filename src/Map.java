@@ -42,6 +42,8 @@ public class Map implements Map2D, Serializable
     @Override
 	public void init(int w, int h, int v)
     {
+        if (w <= 0 || h <= 0)
+            throw new IllegalArgumentException("Invalid width or height parameter");
         _map = new int[w][h];
         for (int i = 0; i < w * h; i++)
         {
@@ -52,6 +54,11 @@ public class Map implements Map2D, Serializable
 	@Override
 	public void init(int[][] arr)
     {
+        for (int i = 0; i < arr.length; i++)
+        {
+            if (arr[i].length != arr[0].length)
+                throw new IllegalArgumentException("Invalid array length");
+        }
         _map = arr.clone();
 	}
 
@@ -76,6 +83,8 @@ public class Map implements Map2D, Serializable
 	@Override
 	public int getPixel(int x, int y)
     {
+        if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+            throw new IllegalArgumentException("x or y is not inside the map");
         return _map[x][y];
     }
 
@@ -84,12 +93,16 @@ public class Map implements Map2D, Serializable
     {
         if (p == null)
             throw new NullPointerException("Pixel2D p is null");
+        if (!isInside(p))
+            throw new IllegalArgumentException("Pixel2D is not inside the map");
         return _map[p.getX()][p.getY()];
 	}
 
 	@Override
 	public void setPixel(int x, int y, int v)
     {
+        if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+            throw new IllegalArgumentException("x or y is not inside the map");
         _map[x][y] = v;
     }
 
@@ -98,6 +111,8 @@ public class Map implements Map2D, Serializable
     {
         if (p == null)
             throw new NullPointerException("Pixel2D p is null");
+        if (!isInside(p))
+            throw new IllegalArgumentException("Pixel2D is not inside the map");
         _map[p.getX()][p.getY()] = v;
 	}
 
@@ -302,4 +317,5 @@ public class Map implements Map2D, Serializable
             _map[(int) gy][y] = color;
         }
     }
+
 }

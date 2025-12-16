@@ -155,8 +155,8 @@ public interface Map2D {
  * Note: the connected component of p are all the pixels in the map with the same "color" of map[p] which are connected to p.
  * Note: two pixels (p1,p2) are connected if there is a path between p1 and p2 with the same color (of p1 and p2).
  * @param p the pixel to start from.
- * @param new_v - the new "color" to be filled in p's connected component.
- * @cyclic if true --> the matrix is assumed to be cyclic.
+ * @param new_v the new "color" to be filled in p's connected component.
+ * @param cyclic if true --> the matrix is assumed to be cyclic.
  * @return the number of "filled" pixels.
  */
 public int fill(Pixel2D p, int new_v, boolean cyclic);
