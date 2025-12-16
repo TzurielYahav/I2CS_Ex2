@@ -160,13 +160,11 @@ public class Map implements Map2D, Serializable
     public void rescale(double sx, double sy)
     {
         int[][] newMap = new int[(int) ((double)_map.length * sy)][(int) ((double)_map[0].length * sx)];
-        int w = newMap[0].length, h = newMap.length;
-        for (int i = 0; i < w * h; i++)
+        for (int x = 0; x < newMap[0].length; x++)
         {
-            int x = i % h, y = i / h;
-            if (x < _map[0].length && y < _map.length)
+            for (int y = 0; y < newMap.length; y++)
             {
-                newMap[y][x] = _map[y][x];
+                newMap[y][x] = _map[(int) (y / sy)][(int) (x / sx)];
             }
         }
     }
@@ -326,7 +324,6 @@ public class Map implements Map2D, Serializable
         {
             if (exploreQueue.get(i).equals(ansQueue.getLast()))
             {
-                ansQueue.add(exploreQueue.get(i));
                 ansQueue.add(parentQueue.get(i));
             }
         }
@@ -457,7 +454,7 @@ public class Map implements Map2D, Serializable
 
         for (int i = 0; i < 4; i++)
         {
-            if (isInside(childrenCoords[i]) && getPixel(childrenCoords[i]) != obsColor && !exploreMap[childrenCoords[i].getX()][childrenCoords[i].getY()])
+            if (isInside(childrenCoords[i]) && getPixel(childrenCoords[i]) != obsColor && !exploreMap[childrenCoords[i].getY()][childrenCoords[i].getX()])
             {
                 children.add(childrenCoords[i]);
                 exploreMap[childrenCoords[i].getY()][childrenCoords[i].getX()] = true;

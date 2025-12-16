@@ -54,20 +54,19 @@ class MapTest {
     void testShortestPath() {
         Pixel2D[] resArr1 = {new Index2D(0,0),new Index2D(0,1),new Index2D(0,2),new Index2D(0,3), new Index2D(1,3)
                 ,new Index2D(2,3),new Index2D(3,3),new Index2D(3,2),new Index2D(3,1),new Index2D(3,0)};
-        Pixel2D[] resArr2 = {new Index2D(0,0),new Index2D(0,1),new Index2D(1,1),new Index2D(1,2), new Index2D(2,2)
+        Pixel2D[] resArr2 = {new Index2D(0,0),new Index2D(0,1),new Index2D(0,2),new Index2D(0,3), new Index2D(1,3)
                 ,new Index2D(2,3),new Index2D(3,3)};
         Pixel2D[] resArr3 = null;
-        Pixel2D[] resArr4 = {new Index2D(0,0),new Index2D(3,0),new Index2D(2,0)};
+        Pixel2D[] resArr4 = {new Index2D(0,0),new Index2D(3,0)};
 
         _m0 = new Map(_map_4x4_1);
         _m1 = new Map(_map_4x4_2);
         _m2 = new Map(_map_4x4_3);
 
-        System.out.println(Arrays.toString(_m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
         assertTrue(isEqualArray(resArr1, _m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
         assertTrue(isEqualArray(resArr2, _m1.shortestPath(new Index2D(0, 0), new Index2D(3, 3), 1, false)));
-        assertTrue(isEqualArray(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, false)));
-        assertTrue(isEqualArray(resArr4, _m2.shortestPath(new Index2D(0, 0), new Index2D(0, 3), 1, true)));
+        assertTrue(isEqualArray(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
+        assertTrue(isEqualArray(resArr4, _m2.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, true)));
     }
 
     @Test

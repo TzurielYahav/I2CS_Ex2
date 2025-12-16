@@ -19,6 +19,7 @@ public class Index2D implements Pixel2D
         _x = other.getX();
         _y = other.getY();
     }
+
     @Override
     public int getX()
     {
