@@ -27,7 +27,7 @@ public class Ex2_GUI
      * @param mapFileName
      * @return
      */
-    public static Map2D loadMap(String mapFileName)
+    public static Map2D loadMap(String mapFileName) throws FileNotFoundException
     {
         Map2D ans = new Map(1);
         try
@@ -54,7 +54,7 @@ public class Ex2_GUI
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            throw new FileNotFoundException(mapFileName + " not found");
         }
         return ans;
     }
@@ -87,7 +87,15 @@ public class Ex2_GUI
     public static void main(String[] a)
     {
         String mapFile = "map.txt";
-        Map2D map = loadMap(mapFile);
+        Map2D map = new Map(1);
+        try
+        {
+            map = loadMap(mapFile);
+        }
+        catch(Exception e)
+        {
+            saveMap(map, mapFile);
+        }
         drawMap(map);
     }
 
