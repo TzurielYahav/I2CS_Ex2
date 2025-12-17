@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -28,6 +29,10 @@ public class Ex2_GUI
     private static int playerY = 0;
     private static double enemyX = 0;
     private static double enemyY = 0;
+    private static double targetX = 0;
+    private static double targetY = 0;
+    private static ArrayList<Pixel2D> waypoints;
+
 
     public static void drawMap()
     {
@@ -180,25 +185,55 @@ public class Ex2_GUI
         playerY = y;
     }
 
-    private static void drawEnemy(int x, int y)
+    private static void drawEnemy(double x, double y)
     {
         map.setPixel((int)enemyX, (int)enemyY, 0);
         drawCell((int)enemyX, (int)enemyY);
-        map.setPixel(x, y, 2);
-        drawCell(x, y);
+        map.setPixel((int)x, (int)y, 2);
+        drawCell((int)x, (int)y);
         enemyX = x;
         enemyY = y;
     }
 
     private static void updateEnemy()
     {
-        Pixel2D waypoint = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false)[1];
-        int newEnemyX = (int)(enemyX + (waypoint.getX() - enemyX) * 0.5);
-        int newEnemyY = (int)(enemyY + (waypoint.getY() - enemyY) * 0.5);
+        if (waypoints == null)
+        {
+            waypoints = new ArrayList<>();
+        }
+        if (targetX != playerX || targetY != playerY)
+        {
+            Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false);
+            compareWaypoints(waypointsArr);
+            targetX = playerX;
+            targetY = playerY;
+        }
+        Pixel2D waypoint = waypoints.getFirst();
+        waypoints.removeFirst();
+        double newEnemyX = (enemyX + ((double) waypoint.getX() - enemyX) * 0.1);
+        double newEnemyY = (enemyY + ((double) waypoint.getY() - enemyY) * 0.1);
 
         if (newEnemyX != enemyX || newEnemyY != enemyY)
         {
             drawEnemy(newEnemyX, newEnemyY);
+        }
+    }
+
+    private static void compareWaypoints(Pixel2D[] waypointsArr)
+    {
+        for (int i = 1; i < waypointsArr.length; i++)
+        {
+            if (i - 1 < waypoints.size())
+            {
+                if (!waypointsArr[i].equals(waypoints.get(i - 1)))
+                {
+                    waypoints.set(i - 1, waypointsArr[i]);
+                }
+            }
+            else
+            {
+                waypoints.add(waypointsArr[i]);
+            }
         }
     }
 
