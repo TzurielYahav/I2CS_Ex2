@@ -17,6 +17,7 @@ import java.util.Scanner;
  */
 public class Ex2_GUI
 {
+    private static final int OBSTACLE = 3;
     private static Map2D map;
     private static Color[] colors = {
             StdDraw.WHITE,
@@ -133,7 +134,6 @@ public class Ex2_GUI
             saveMap(map, mapFile);
         }
         int[][] mapArr = new int[10][10];
-        mapArr[1][1] = 3;
         map.init(mapArr);
         gameLoop();
         saveMap(map, mapFile);
@@ -196,7 +196,7 @@ public class Ex2_GUI
     {
         if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
         {
-            Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false);
+            Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), OBSTACLE, false);
             compareWaypoints(waypointsArr);
             targetX = playerX;
             targetY = playerY;
@@ -257,9 +257,9 @@ public class Ex2_GUI
             }
             if (key == 'q') isGameRunning = false;
             if (key == 'w') newPlayerY += 1;
-            if (key == 's') newPlayerY -= 1;
-            if (key == 'a') newPlayerX -= 1;
-            if (key == 'd') newPlayerX += 1;
+            else if (key == 's') newPlayerY -= 1;
+            else if (key == 'a') newPlayerX -= 1;
+            else if (key == 'd') newPlayerX += 1;
         }
         if (newPlayerX != playerX || newPlayerY != playerY)
         {
@@ -277,8 +277,7 @@ public class Ex2_GUI
                 newPlayerY = map.getHeight() - 1;
         if (newPlayerY < 0)
                 newPlayerY = 0;
-
-        if (newPlayerX != playerX || newPlayerY != playerY)
+        if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE && (newPlayerX != playerX || newPlayerY != playerY))
         {
             drawPlayer(newPlayerX, newPlayerY);
         }
@@ -332,7 +331,7 @@ public class Ex2_GUI
         map.init(mapArr);
         if (level == 1)
         {
-            map.drawRect(new Index2D(3,3), new Index2D(6,6), 3);
+            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE);
             drawPlayer(0,0);
             drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
         }
