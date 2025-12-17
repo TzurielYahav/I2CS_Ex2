@@ -46,6 +46,8 @@ public class Ex2_GUI
 
 
         drawGrid();
+        drawPlayer(playerX, playerY);
+        drawEnemy(enemyX, enemyY);
 //        StdDraw.setPenRadius(0.005);
 //        StdDraw.setPenColor(StdDraw.BLACK);
 //        drawArea(po1,po2, xx[0], 10, samples);
@@ -248,8 +250,11 @@ public class Ex2_GUI
         int newPlayerX = playerX;
         int newPlayerY = playerY;
 
-        while (StdDraw.hasNextKeyTyped()) {
+        while (StdDraw.hasNextKeyTyped())
+        {
             char key = StdDraw.nextKeyTyped();
+            if (49 < key && key < 57)
+                changeLevel(key - 48); // stop game
             if (key == 'q') isGameRunning = false;
             if (key == 'w') newPlayerY += 1;
             if (key == 's') newPlayerY -= 1;
@@ -340,5 +345,14 @@ public class Ex2_GUI
         }
     }
 
-
+    private static void changeLevel(int level)
+    {
+        int[][] mapArr = new int[10][10];
+        map.init(mapArr);
+        if (level == 1)
+        {
+            map.drawRect(new Index2D(3,3), new Index2D(6,6), 3);
+        }
+        drawMap();
+    }
 }
