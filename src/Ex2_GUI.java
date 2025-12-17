@@ -145,11 +145,11 @@ public class Ex2_GUI
         StdDraw.setPenColor(StdDraw.GRAY);
         for (int i = 0; i < map.getHeight(); i++)
         {
-            StdDraw.line(0,i,map.getWidth(),i);
+            StdDraw.line(0,i + 0.5,map.getWidth(),i + 0.5);
         }
         for (int i = 0; i < map.getWidth(); i++)
         {
-            StdDraw.line(i,0,i,map.getHeight());
+            StdDraw.line(i + 0.5,0,i + 0.5,map.getHeight());
         }
 
         // ==== Cells ====
@@ -159,7 +159,7 @@ public class Ex2_GUI
             for (int x = 0; x < map.getWidth(); x++)
             {
                 StdDraw.setPenColor(colors[map.getPixel(x, y)]);
-                StdDraw.filledCircle(x, y, 0.2);
+                StdDraw.filledCircle(x + 0.5, y + 0.5, 0.2);
             }
         }
     }
