@@ -170,7 +170,7 @@ public class Ex2_GUI
 
     private static void update()
     {
-        updatePlayer();
+        processInput();
         updateEnemy();
     }
 
@@ -245,22 +245,32 @@ public class Ex2_GUI
         }
     }
 
-    private static void updatePlayer()
+    private static void processInput()
     {
         int newPlayerX = playerX;
         int newPlayerY = playerY;
-
         while (StdDraw.hasNextKeyTyped())
         {
             char key = StdDraw.nextKeyTyped();
             if (49 < (int)key && (int)key < 57)
-                changeLevel((int)key - 47); // stop game
+            {
+                changeLevel((int)key - 47);
+                return;
+            }
             if (key == 'q') isGameRunning = false;
             if (key == 'w') newPlayerY += 1;
             if (key == 's') newPlayerY -= 1;
             if (key == 'a') newPlayerX -= 1;
             if (key == 'd') newPlayerX += 1;
         }
+        if (newPlayerX != playerX || newPlayerY != playerY)
+        {
+            updatePlayer(newPlayerX, newPlayerY);
+        }
+    }
+
+    private static void updatePlayer(int newPlayerX, int newPlayerY)
+    {
         if (newPlayerX >= map.getWidth())
                 newPlayerX = map.getWidth() - 1;
         if (newPlayerX < 0)
@@ -269,33 +279,6 @@ public class Ex2_GUI
                 newPlayerY = map.getHeight() - 1;
         if (newPlayerY < 0)
                 newPlayerY = 0;
-
-//        if (StdDraw.isKeyPressed('w'))
-//        {
-//            newPlayerX += 1;
-//            if (newPlayerX >= map.getWidth())
-//                newPlayerX = map.getWidth() - 1;
-//        }
-//        else if (StdDraw.isKeyPressed('s'))
-//        {
-//            newPlayerX -= 1;
-//            if (newPlayerX < 0)
-//                newPlayerX = 0;
-//
-//        }
-//        else if (StdDraw.isKeyPressed('a'))
-//        {
-//            newPlayerY += 1;
-//            if (newPlayerY >= map.getHeight())
-//                newPlayerY = map.getHeight() - 1;
-//
-//        }
-//        else if (StdDraw.isKeyPressed('d'))
-//        {
-//            newPlayerY -= 1;
-//            if (newPlayerY < 0)
-//                newPlayerY = 0;
-//        }
 
         if (newPlayerX != playerX || newPlayerY != playerY)
         {
