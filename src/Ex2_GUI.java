@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -28,25 +29,33 @@ public class Ex2_GUI
      */
     public static Map2D loadMap(String mapFileName)
     {
+        Map2D ans = new Map(1);
         try
         {
             File myFile = new File(mapFileName);
             Scanner myReader = new Scanner(myFile);
-            int i=0;
+            ArrayList<String[]> rowList = new ArrayList<>();
             while (myReader.hasNextLine())
             {
                 String data = myReader.nextLine();
-                System.out.println(i+") "+data);
-                i=i+1;
+                String[] splitString =  data.split(",");
+                rowList.add(splitString);
             }
+            int[][] mapArr = new int[rowList.size()][rowList.getFirst().length];
+            for (int i = 0; i < rowList.size(); i++)
+            {
+                for (int j = 0; j < rowList.get(i).length; j++)
+                {
+                    mapArr[i][j] = Integer.parseInt(rowList.get(i)[j]);
+                }
+            }
+            ans.init(mapArr);
             myReader.close();
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        Map2D ans = new Map(4);
-
         return ans;
     }
 
@@ -77,22 +86,9 @@ public class Ex2_GUI
 
     public static void main(String[] a)
     {
-//        String mapFile = "map.txt";
-//        Map2D map = loadMap(mapFile);
-//        drawMap(map);
-//
-//        String str = "file_123.txt";
-//        String data = "This is a multi String file,\n"
-//                + "second line ...\n ";
-//        save(str, data);
-//        try {
-//            load(str);
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        System.out.println("OK");
-
+        String mapFile = "map.txt";
+        Map2D map = loadMap(mapFile);
+        drawMap(map);
     }
 
     /// ///////////// Private functions ///////////////

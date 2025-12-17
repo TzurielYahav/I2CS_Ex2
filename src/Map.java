@@ -133,8 +133,7 @@ public class Map implements Map2D, Serializable
     {
         if (p == null)
             throw new NullPointerException("Map2D p is null");
-        int[][] otherMap = p.getMap();
-        return _map.length == otherMap.length && _map[0].length == otherMap[0].length;
+        return getHeight() == p.getHeight() && getWidth() == p.getWidth();
     }
 
     @Override
