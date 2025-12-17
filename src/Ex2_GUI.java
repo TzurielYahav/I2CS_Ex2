@@ -135,7 +135,6 @@ public class Ex2_GUI
         int[][] mapArr = new int[10][10];
         mapArr[1][1] = 3;
         map.init(mapArr);
-        drawMap();
         gameLoop();
         saveMap(map, mapFile);
     }
@@ -150,6 +149,7 @@ public class Ex2_GUI
         playerY = 0;
         enemyX = map.getWidth() - 1;
         enemyY  = map.getHeight() - 1;
+        drawMap();
 
         long previousTime = System.currentTimeMillis();
         long lag = 0L;
@@ -158,8 +158,6 @@ public class Ex2_GUI
             long elapsedTime = currentTime - previousTime;
             previousTime = currentTime;
             lag += elapsedTime;
-
-//            processInput();
 
             while (lag >= MS_PER_FRAME) {
                 update();
