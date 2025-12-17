@@ -31,7 +31,9 @@ public class Ex2_GUI
     private static double enemyY = 0;
     private static double targetX = 0;
     private static double targetY = 0;
-    private static ArrayList<Pixel2D> waypoints;
+    private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
+    private static boolean isGameRunning = false;
+
 
 
     public static void drawMap()
@@ -141,7 +143,7 @@ public class Ex2_GUI
     private static void gameLoop()
     {
         long MS_PER_FRAME = 200;
-        boolean isGameRunning = true;
+        isGameRunning = true;
         playerX = 0;
         playerY = 0;
         enemyX = map.getWidth() - 1;
@@ -155,11 +157,6 @@ public class Ex2_GUI
             previousTime = currentTime;
             lag += elapsedTime;
 
-            if (StdDraw.isKeyPressed('q'))
-            {
-
-                isGameRunning = false;
-            }
 //            processInput();
 
             while (lag >= MS_PER_FRAME) {
@@ -197,11 +194,7 @@ public class Ex2_GUI
 
     private static void updateEnemy()
     {
-        if (waypoints == null)
-        {
-            waypoints = new ArrayList<>();
-        }
-        if (targetX != playerX || targetY != playerY)
+        if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
         {
             Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false);
             compareWaypoints(waypointsArr);
@@ -211,8 +204,20 @@ public class Ex2_GUI
         Pixel2D waypoint = waypoints.getFirst();
         if (waypoint.equals(new Index2D((int)enemyX, (int)enemyY)))
             waypoints.removeFirst();
-        double newEnemyX = (enemyX + ((double) waypoint.getX() - enemyX) * 0.1);
-        double newEnemyY = (enemyY + ((double) waypoint.getY() - enemyY) * 0.1);
+
+        double newEnemyX = enemyX;
+        double newEnemyY = enemyY;
+        if (waypoint.getX() > enemyX)
+            newEnemyX += 0.25;
+        else if (waypoint.getX() < enemyX)
+            newEnemyX -= 0.25;
+        else if (waypoint.getY() > enemyY)
+            newEnemyY += 0.25;
+        else if (waypoint.getY() < enemyY)
+            newEnemyY -= 0.25;
+
+//        double newEnemyX = (enemyX + ((double) waypoint.getX() - enemyX) * 0.1);
+//        double newEnemyY = (enemyY + ((double) waypoint.getY() - enemyY) * 0.1);
 
         if (newEnemyX != enemyX || newEnemyY != enemyY)
         {
@@ -245,7 +250,7 @@ public class Ex2_GUI
 
         while (StdDraw.hasNextKeyTyped()) {
             char key = StdDraw.nextKeyTyped();
-
+            if (key == 'q') isGameRunning = false;
             if (key == 'w') newPlayerY += 1;
             if (key == 's') newPlayerY -= 1;
             if (key == 'a') newPlayerX -= 1;
