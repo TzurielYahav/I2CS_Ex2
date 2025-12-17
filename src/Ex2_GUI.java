@@ -127,7 +127,7 @@ public class Ex2_GUI
         mapArr[1][1] = 3;
         map.init(mapArr);
         drawMap();
-
+        gameLoop();
         saveMap(map, mapFile);
     }
 
@@ -152,6 +152,7 @@ public class Ex2_GUI
 
             if (StdDraw.isKeyPressed('q'))
             {
+
                 isGameRunning = false;
             }
 //            processInput();
@@ -172,7 +173,9 @@ public class Ex2_GUI
     private static void drawPlayer(int x, int y)
     {
         map.setPixel(playerX, playerY, 0);
+        drawCell(playerX, playerY);
         map.setPixel(x, y, 1);
+        drawCell(x, y);
         playerX = x;
         playerY = y;
     }
@@ -180,14 +183,16 @@ public class Ex2_GUI
     private static void drawEnemy(int x, int y)
     {
         map.setPixel((int)enemyX, (int)enemyY, 0);
+        drawCell((int)enemyX, (int)enemyY);
         map.setPixel(x, y, 2);
+        drawCell(x, y);
         enemyX = x;
         enemyY = y;
     }
 
     private static void updateEnemy()
     {
-        Pixel2D waypoint = map.shortestPath(new Index2D(playerX, playerY), new Index2D((int)enemyX, (int)enemyY), 3, false)[0];
+        Pixel2D waypoint = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false)[0];
         int newEnemyX = (int)(enemyX + (waypoint.getX() - enemyX) * 0.5);
         int newEnemyY = (int)(enemyY + (waypoint.getY() - enemyY) * 0.5);
 
@@ -229,6 +234,12 @@ public class Ex2_GUI
         }
 
         drawPlayer(newPlayerX, newPlayerY);
+    }
+
+    private static void drawCell(int x, int y)
+    {
+        StdDraw.setPenColor(colors[map.getPixel(x, y)]);
+        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.2);
     }
 
     private static void drawGrid()
