@@ -57,19 +57,22 @@ public class Ex2_GUI
      */
     public static void saveMap(Map2D map, String mapFileName)
     {
-//        int[][] mapArr = map.getMap();
-//        try
-//        {
-//            FileWriter myWriter = new FileWriter(mapFileName);
-//            myWriter.write("Text file named: "+file+"\n");
-//            myWriter.write("Point "+p1.toString());
-//            myWriter.close();
-//        }
-//        catch(Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-
+        int[][] mapArr = map.getMap();
+        try
+        {
+            FileWriter myWriter = new FileWriter(mapFileName);
+            for (int i = 0; i < mapArr.length; i++) {
+                for (int j = 0; j < mapArr[i].length; j++) {
+                    myWriter.write(mapArr[i][j] + ",");
+                }
+                myWriter.write("\n");
+            }
+            myWriter.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] a)
