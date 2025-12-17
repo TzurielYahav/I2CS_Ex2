@@ -209,7 +209,8 @@ public class Ex2_GUI
             targetY = playerY;
         }
         Pixel2D waypoint = waypoints.getFirst();
-        waypoints.removeFirst();
+        if (waypoint.equals(new Index2D((int)enemyX, (int)enemyY)))
+            waypoints.removeFirst();
         double newEnemyX = (enemyX + ((double) waypoint.getX() - enemyX) * 0.1);
         double newEnemyY = (enemyY + ((double) waypoint.getY() - enemyY) * 0.1);
 
