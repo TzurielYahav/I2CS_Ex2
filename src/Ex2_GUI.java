@@ -15,12 +15,27 @@ import java.util.Scanner;
  */
 public class Ex2_GUI
 {
-    public static void drawMap(Map2D map)
+    private static Map2D map;
+
+    public static void drawMap()
     {
-        double min = 50, max=20;
-        int samples = 16;
-        StdDraw.setScale(min, max);
+        double maxX = map.getWidth(), maxY = map.getHeight();
+//        int samples = 16;
+        StdDraw.setXscale(0,max);
+        StdDraw.setYscale(0,max);
         StdDraw.clear();
+
+        StdDraw.setPenColor(StdDraw.GRAY);
+        drawGrid(min,max);
+        StdDraw.setPenRadius(0.005);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        drawArea(po1,po2, xx[0], 10, samples);
+        StdDraw.setPenColor(StdDraw.BLUE);
+        drawPoly(po1, min, max,n);
+        drawInfo(po2,0,8);
+        StdDraw.setPenColor(StdDraw.GREEN);
+        drawPoly(po2, min, max,n);
+        drawInfo(po1,0,7);
     }
 
     /**
@@ -87,7 +102,7 @@ public class Ex2_GUI
     public static void main(String[] a)
     {
         String mapFile = "map.txt";
-        Map2D map = new Map(1);
+        map = new Map(1);
         try
         {
             map = loadMap(mapFile);
@@ -96,8 +111,18 @@ public class Ex2_GUI
         {
             saveMap(map, mapFile);
         }
-        drawMap(map);
+        drawMap();
+        saveMap(map, mapFile);
     }
 
     /// ///////////// Private functions ///////////////
+
+    public static void drawGrid(double min, double max)
+    {
+        StdDraw.setXscale(min, max);
+        StdDraw.line(0,min,0,max);
+        StdDraw.line(min,0,max,0);
+    }
+
+
 }
