@@ -197,6 +197,10 @@ public class Ex2_GUI
         if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
         {
             Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), OBSTACLE, false);
+            if (waypointsArr == null)
+            {
+                return;
+            }
             compareWaypoints(waypointsArr);
             targetX = playerX;
             targetY = playerY;
@@ -327,11 +331,26 @@ public class Ex2_GUI
 
     private static void changeLevel(int level)
     {
-        int[][] mapArr = new int[10][10];
-        map.init(mapArr);
         if (level == 1)
         {
+            int[][] mapArr = new int[10][10];
+            map.init(mapArr);
             map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE);
+            drawPlayer(0,0);
+            drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
+        }
+        if (level == 2)
+        {
+            int[][] mapArr = new int[26][29];
+            map.init(mapArr);
+            map.drawRect(new Index2D(0,10), new Index2D(4,20), OBSTACLE);
+            map.drawRect(new Index2D(25,10), new Index2D(21,20), OBSTACLE);
+            map.drawRect(new Index2D(1,1), new Index2D(10,2), OBSTACLE);
+            map.drawRect(new Index2D(15,1), new Index2D(24,2), OBSTACLE);
+            map.drawRect(new Index2D(6,3), new Index2D(7,5), OBSTACLE);
+            map.drawRect(new Index2D(18,3), new Index2D(19,5), OBSTACLE);
+            map.drawRect(new Index2D(12,1), new Index2D(13,3), OBSTACLE);
+            map.drawRect(new Index2D(9,4), new Index2D(16,5), OBSTACLE);
             drawPlayer(0,0);
             drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
         }

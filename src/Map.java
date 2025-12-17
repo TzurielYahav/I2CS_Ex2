@@ -419,7 +419,7 @@ public class Map implements Map2D, Serializable
 
     private Index2D isInBounds(int x, int y, boolean cyclic)
     {
-        if (x >= _map.length)
+        if (x >= _map[0].length)
         {
             if (cyclic)
                 x = 0;
@@ -429,12 +429,12 @@ public class Map implements Map2D, Serializable
         else if (x < 0)
         {
             if (cyclic)
-                x = _map.length - 1;
+                x = _map[0].length - 1;
             else
                 x = -1;
         }
 
-        if (y >= _map[0].length)
+        if (y >= _map.length)
         {
             if (cyclic)
                 y = 0;
@@ -444,7 +444,7 @@ public class Map implements Map2D, Serializable
         else if (y < 0)
         {
             if (cyclic)
-                y = _map[0].length - 1;
+                y = _map.length - 1;
             else
                 y = -1;
         }

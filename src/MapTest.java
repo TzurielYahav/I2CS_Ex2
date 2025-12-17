@@ -201,6 +201,24 @@ class MapTest {
     }
 
     @Test
+    void testPacman()
+    {
+        int[][] mapArr = new int[29][26];
+        _m0.init(mapArr);
+        _m0.drawRect(new Index2D(0,10), new Index2D(4,20), 3);
+        _m0.drawRect(new Index2D(25,10), new Index2D(21,20), 3);
+        _m0.drawRect(new Index2D(1,1), new Index2D(10,2), 3);
+        _m0.drawRect(new Index2D(15,1), new Index2D(24,2), 3);
+        _m0.drawRect(new Index2D(6,3), new Index2D(7,5), 3);
+        _m0.drawRect(new Index2D(18,3), new Index2D(19,5), 3);
+        _m0.drawRect(new Index2D(12,1), new Index2D(13,3), 3);
+        _m0.drawRect(new Index2D(9,4), new Index2D(16,5), 3);
+
+        System.out.println(Arrays.toString(_m0.shortestPath(new Index2D(_m0.getWidth() - 1, _m0.getHeight() - 1), new Index2D(0, 0), 3, false)));
+        assertNotNull(_m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false));
+    }
+
+    @Test
     void testAllDistance()
     {
         int[][] resArr1 = {{0,-1,10,9}, {1,-1,9,8}, {2,-1,-1,7}, {3,4,5,6}};
