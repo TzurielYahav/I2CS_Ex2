@@ -21,10 +21,10 @@ public class Ex2_GUI
     private static Map2D map;
     private static Color[] colors = {
             StdDraw.WHITE,
-            StdDraw.BLACK,
+            StdDraw.BLUE,
             StdDraw.RED,
-            StdDraw.YELLOW,
-            StdDraw.GREEN
+            StdDraw.BLACK,
+            StdDraw.YELLOW
     };
     private static int playerX = 0;
     private static int playerY = 0;
@@ -260,10 +260,14 @@ public class Ex2_GUI
                 return;
             }
             if (key == 'q') isGameRunning = false;
-            if (key == 'w') newPlayerY += 1;
-            else if (key == 's') newPlayerY -= 1;
-            else if (key == 'a') newPlayerX -= 1;
-            else if (key == 'd') newPlayerX += 1;
+
+            if (newPlayerX == playerX && newPlayerY == playerY)
+            {
+                if (key == 'w') newPlayerY += 1;
+                else if (key == 's') newPlayerY -= 1;
+                else if (key == 'a') newPlayerX -= 1;
+                else if (key == 'd') newPlayerX += 1;
+            }
         }
         if (newPlayerX != playerX || newPlayerY != playerY)
         {
@@ -290,7 +294,7 @@ public class Ex2_GUI
     private static void drawCell(int x, int y)
     {
         StdDraw.setPenColor(colors[map.getPixel(x, y)]);
-        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.2);
+        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
     }
 
     private static void drawGrid()
@@ -324,7 +328,7 @@ public class Ex2_GUI
             for (int x = 0; x < map.getWidth(); x++)
             {
                 StdDraw.setPenColor(colors[map.getPixel(x, y)]);
-                StdDraw.filledCircle(x + 0.5, y + 0.5, 0.2);
+                StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
             }
         }
     }
@@ -335,14 +339,16 @@ public class Ex2_GUI
         {
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
-            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE);
             drawPlayer(0,0);
             drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
+            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE);
         }
         if (level == 2)
         {
-            int[][] mapArr = new int[26][29];
+            int[][] mapArr = new int[29][26];
             map.init(mapArr);
+            drawPlayer(0,0);
+            drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
             map.drawRect(new Index2D(0,10), new Index2D(4,20), OBSTACLE);
             map.drawRect(new Index2D(25,10), new Index2D(21,20), OBSTACLE);
             map.drawRect(new Index2D(1,1), new Index2D(10,2), OBSTACLE);
@@ -351,8 +357,6 @@ public class Ex2_GUI
             map.drawRect(new Index2D(18,3), new Index2D(19,5), OBSTACLE);
             map.drawRect(new Index2D(12,1), new Index2D(13,3), OBSTACLE);
             map.drawRect(new Index2D(9,4), new Index2D(16,5), OBSTACLE);
-            drawPlayer(0,0);
-            drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
         }
         drawMap();
     }
