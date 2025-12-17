@@ -192,7 +192,7 @@ public class Ex2_GUI
 
     private static void updateEnemy()
     {
-        Pixel2D waypoint = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false)[0];
+        Pixel2D waypoint = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), 3, false)[1];
         int newEnemyX = (int)(enemyX + (waypoint.getX() - enemyX) * 0.5);
         int newEnemyY = (int)(enemyY + (waypoint.getY() - enemyY) * 0.5);
 
@@ -206,34 +206,55 @@ public class Ex2_GUI
     {
         int newPlayerX = playerX;
         int newPlayerY = playerY;
-        if (StdDraw.isKeyPressed('w'))
-        {
-            newPlayerX += 1;
-            if (newPlayerX >= map.getWidth())
+
+        while (StdDraw.hasNextKeyTyped()) {
+            char key = StdDraw.nextKeyTyped();
+
+            if (key == 'w') newPlayerY += 1;
+            if (key == 's') newPlayerY -= 1;
+            if (key == 'a') newPlayerX -= 1;
+            if (key == 'd') newPlayerX += 1;
+        }
+        if (newPlayerX >= map.getWidth())
                 newPlayerX = map.getWidth() - 1;
-        }
-        else if (StdDraw.isKeyPressed('s'))
-        {
-            newPlayerX -= 1;
-            if (newPlayerX < 0)
+        if (newPlayerX < 0)
                 newPlayerX = 0;
-
-        }
-        else if (StdDraw.isKeyPressed('a'))
-        {
-            newPlayerY += 1;
-            if (newPlayerY >= map.getHeight())
+        if (newPlayerY >= map.getHeight())
                 newPlayerY = map.getHeight() - 1;
-
-        }
-        else if (StdDraw.isKeyPressed('d'))
-        {
-            newPlayerY -= 1;
-            if (newPlayerY < 0)
+        if (newPlayerY < 0)
                 newPlayerY = 0;
-        }
 
-        drawPlayer(newPlayerX, newPlayerY);
+//        if (StdDraw.isKeyPressed('w'))
+//        {
+//            newPlayerX += 1;
+//            if (newPlayerX >= map.getWidth())
+//                newPlayerX = map.getWidth() - 1;
+//        }
+//        else if (StdDraw.isKeyPressed('s'))
+//        {
+//            newPlayerX -= 1;
+//            if (newPlayerX < 0)
+//                newPlayerX = 0;
+//
+//        }
+//        else if (StdDraw.isKeyPressed('a'))
+//        {
+//            newPlayerY += 1;
+//            if (newPlayerY >= map.getHeight())
+//                newPlayerY = map.getHeight() - 1;
+//
+//        }
+//        else if (StdDraw.isKeyPressed('d'))
+//        {
+//            newPlayerY -= 1;
+//            if (newPlayerY < 0)
+//                newPlayerY = 0;
+//        }
+
+        if (newPlayerX != playerX || newPlayerY != playerY)
+        {
+            drawPlayer(newPlayerX, newPlayerY);
+        }
     }
 
     private static void drawCell(int x, int y)
