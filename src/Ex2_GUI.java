@@ -253,8 +253,8 @@ public class Ex2_GUI
         while (StdDraw.hasNextKeyTyped())
         {
             char key = StdDraw.nextKeyTyped();
-            if (49 < key && key < 57)
-                changeLevel(key - 48); // stop game
+            if (49 < (int)key && (int)key < 57)
+                changeLevel((int)key - 47); // stop game
             if (key == 'q') isGameRunning = false;
             if (key == 'w') newPlayerY += 1;
             if (key == 's') newPlayerY -= 1;
