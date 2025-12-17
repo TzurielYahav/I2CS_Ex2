@@ -250,9 +250,9 @@ public class Ex2_GUI
         while (StdDraw.hasNextKeyTyped())
         {
             char key = StdDraw.nextKeyTyped();
-            if (49 < (int)key && (int)key < 57)
+            if (49 <= (int)key && (int)key <= 57)
             {
-                changeLevel((int)key - 47);
+                changeLevel((int)key - 48);
                 return;
             }
             if (key == 'q') isGameRunning = false;
@@ -333,6 +333,8 @@ public class Ex2_GUI
         if (level == 1)
         {
             map.drawRect(new Index2D(3,3), new Index2D(6,6), 3);
+            drawPlayer(0,0);
+            drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
         }
         drawMap();
     }
