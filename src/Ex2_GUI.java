@@ -24,6 +24,10 @@ public class Ex2_GUI
             StdDraw.YELLOW,
             StdDraw.GREEN
     };
+    private static int playerX = 0;
+    private static int playerY = 0;
+    private static double enemyX = 0;
+    private static double enemyY = 0;
 
     public static void drawMap()
     {
@@ -123,12 +127,111 @@ public class Ex2_GUI
         mapArr[1][1] = 3;
         map.init(mapArr);
         drawMap();
+
         saveMap(map, mapFile);
     }
 
     /// ///////////// Private functions ///////////////
 
-    public static void drawGrid()
+    private static void gameLoop()
+    {
+        long MS_PER_FRAME = 200;
+        boolean isGameRunning = true;
+        playerX = 0;
+        playerY = 0;
+        enemyX = map.getWidth() - 1;
+        enemyY  = map.getHeight() - 1;
+
+        long previousTime = System.currentTimeMillis();
+        long lag = 0L;
+        while (isGameRunning) {
+            long currentTime = System.currentTimeMillis();
+            long elapsedTime = currentTime - previousTime;
+            previousTime = currentTime;
+            lag += elapsedTime;
+
+            if (StdDraw.isKeyPressed('q'))
+            {
+                isGameRunning = false;
+            }
+//            processInput();
+
+            while (lag >= MS_PER_FRAME) {
+                update();
+                lag -= MS_PER_FRAME;
+            }
+        }
+    }
+
+    private static void update()
+    {
+        updatePlayer();
+        updateEnemy();
+    }
+
+    private static void drawPlayer(int x, int y)
+    {
+        map.setPixel(playerX, playerY, 0);
+        map.setPixel(x, y, 1);
+        playerX = x;
+        playerY = y;
+    }
+
+    private static void drawEnemy(int x, int y)
+    {
+        map.setPixel((int)enemyX, (int)enemyY, 0);
+        map.setPixel(x, y, 2);
+        enemyX = x;
+        enemyY = y;
+    }
+
+    private static void updateEnemy()
+    {
+        Pixel2D waypoint = map.shortestPath(new Index2D(playerX, playerY), new Index2D((int)enemyX, (int)enemyY), 3, false)[0];
+        int newEnemyX = (int)(enemyX + (waypoint.getX() - enemyX) * 0.5);
+        int newEnemyY = (int)(enemyY + (waypoint.getY() - enemyY) * 0.5);
+
+        if (newEnemyX != enemyX || newEnemyY != enemyY)
+        {
+            drawEnemy(newEnemyX, newEnemyY);
+        }
+    }
+
+    private static void updatePlayer()
+    {
+        int newPlayerX = playerX;
+        int newPlayerY = playerY;
+        if (StdDraw.isKeyPressed('w'))
+        {
+            newPlayerX += 1;
+            if (newPlayerX >= map.getWidth())
+                newPlayerX = map.getWidth() - 1;
+        }
+        else if (StdDraw.isKeyPressed('s'))
+        {
+            newPlayerX -= 1;
+            if (newPlayerX < 0)
+                newPlayerX = 0;
+
+        }
+        else if (StdDraw.isKeyPressed('a'))
+        {
+            newPlayerY += 1;
+            if (newPlayerY >= map.getHeight())
+                newPlayerY = map.getHeight() - 1;
+
+        }
+        else if (StdDraw.isKeyPressed('d'))
+        {
+            newPlayerY -= 1;
+            if (newPlayerY < 0)
+                newPlayerY = 0;
+        }
+
+        drawPlayer(newPlayerX, newPlayerY);
+    }
+
+    private static void drawGrid()
     {
 
 //        StdDraw.setPenColor(StdDraw.BLACK);
