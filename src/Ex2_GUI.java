@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -19,7 +18,7 @@ public class Ex2_GUI
 {
     private static final int OBSTACLE = 3;
     private static Map2D map;
-    private static Color[] colors = {
+    private static final Color[] COLORS = {
             StdDraw.WHITE,
             StdDraw.BLUE,
             StdDraw.RED,
@@ -293,7 +292,7 @@ public class Ex2_GUI
 
     private static void drawCell(int x, int y)
     {
-        StdDraw.setPenColor(colors[map.getPixel(x, y)]);
+        StdDraw.setPenColor(COLORS[map.getPixel(x, y)]);
         StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
     }
 
@@ -327,7 +326,7 @@ public class Ex2_GUI
         {
             for (int x = 0; x < map.getWidth(); x++)
             {
-                StdDraw.setPenColor(colors[map.getPixel(x, y)]);
+                StdDraw.setPenColor(COLORS[map.getPixel(x, y)]);
                 StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
             }
         }
