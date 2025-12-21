@@ -31,6 +31,7 @@ public class Ex2_GUI
     private static int enemyY = 0;
     private static Pixel2D playerPos = new Index2D(0,0);
     private static Pixel2D enemyPos = new Index2D(0,0);
+    private static Pixel2D targetPos = new Index2D(0,0);
     private static int targetX = 0;
     private static int targetY = 0;
     private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
@@ -48,8 +49,8 @@ public class Ex2_GUI
 
 
         drawGrid();
-        drawPlayer(playerX, playerY);
-        drawEnemy(enemyX, enemyY);
+        drawPlayer(playerPos);
+        drawEnemy(enemyPos);
 //        StdDraw.setPenRadius(0.005);
 //        StdDraw.setPenColor(StdDraw.BLACK);
 //        drawArea(po1,po2, xx[0], 10, samples);
@@ -150,8 +151,10 @@ public class Ex2_GUI
         playerY = 0;
         enemyX = map.getWidth() - 1;
         enemyY = map.getHeight() - 1;
+
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
+        targetPos = new Index2D(0, 0);
         drawMap();
 
         long previousTime = System.currentTimeMillis();
@@ -195,22 +198,20 @@ public class Ex2_GUI
 
     private static void updateEnemy()
     {
-        if (enemyX == playerX && enemyY == playerY)
+        if (enemyPos.equals(playerPos))
             return;
-        if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
+        if (!targetPos.equals(playerPos) || waypoints.isEmpty())
         {
-            Pixel2D[] waypointsArr = map.shortestPath(new Index2D(enemyX, enemyY), new Index2D(playerX, playerY), OBSTACLE, false);
+            Pixel2D[] waypointsArr = map.shortestPath(enemyPos, playerPos, OBSTACLE, false);
             if (waypointsArr == null)
             {
                 return;
             }
             compareWaypoints(waypointsArr);
-            targetX = playerX;
-            targetY = playerY;
+            targetPos = new Index2D(playerPos.getX(), playerPos.getY());
         }
-        Pixel2D waypoint = waypoints.getFirst();
+        drawEnemy(waypoints.getFirst());
         waypoints.removeFirst();
-        drawEnemy(newEnemyX, newEnemyY);
     }
 
     private static void compareWaypoints(Pixel2D[] waypointsArr)
