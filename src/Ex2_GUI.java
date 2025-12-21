@@ -123,26 +123,41 @@ public class Ex2_GUI
         }
         catch(Exception e)
         {
+            int[][] mapArr = new int[10][10];
+            map.init(mapArr);
             saveMap(map, mapFile);
         }
-        int[][] mapArr = new int[10][10];
-        map.init(mapArr);
         gameLoop();
         saveMap(map, mapFile);
     }
 
     /// ///////////// Private functions ///////////////
 
-    private static void gameLoop()
+    private static void gameInit()
     {
-        long MS_PER_FRAME = 200;
         isGameRunning = true;
+        enemyTimer = 0;
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
-        targetPos = new Index2D(0, 0);
-        enemyTimer = 0;
+        targetPos = playerPos;
+        for (int i = 0; i < map.getWidth(); i++)
+        {
+            for (int j = 0; j < map.getHeight(); j++)
+            {
+                if (map.getPixel(i, j) == PLAYER_VALUE)
+                    playerPos = new Index2D(i, j);
+                else if (map.getPixel(i, j) == ENEMY_VALUE)
+                    enemyPos = new Index2D(i, j);
+            }
+        }
         drawMap();
+    }
 
+    private static void gameLoop()
+    {
+        gameInit();
+
+        long MS_PER_FRAME = 200;
         long previousTime = System.currentTimeMillis();
         long lag = 0L;
         while (isGameRunning) {
