@@ -361,10 +361,10 @@ public class Ex2_GUI
         double centerX = (double) map.getWidth() / 2;
         double centerY = (double) (map.getHeight() + (map.getHeight() / 10)) / 2;
         isGameRunning = false;
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.filledRectangle(centerX, centerY, 3, 2);
         StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.rectangle(centerX, centerY, 3, 2);
+        StdDraw.filledRectangle(centerX, centerY, 5, 2);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.rectangle(centerX, centerY, 5, 2);
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.text(centerX, centerY, "Game Over");
     }
