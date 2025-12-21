@@ -327,20 +327,17 @@ public class Ex2_GUI
 
     private static void changeLevel(int level)
     {
+
         if (level == 1)
         {
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
-            drawPlayer(0,0);
-            drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
             map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE);
         }
         if (level == 2)
         {
             int[][] mapArr = new int[29][26];
             map.init(mapArr);
-            drawPlayer(0,0);
-            drawEnemy(map.getWidth() - 1,map.getHeight() - 1);
             map.drawRect(new Index2D(0,10), new Index2D(4,20), OBSTACLE);
             map.drawRect(new Index2D(25,10), new Index2D(21,20), OBSTACLE);
             map.drawRect(new Index2D(1,1), new Index2D(10,2), OBSTACLE);
@@ -350,6 +347,8 @@ public class Ex2_GUI
             map.drawRect(new Index2D(12,1), new Index2D(13,3), OBSTACLE);
             map.drawRect(new Index2D(9,4), new Index2D(16,5), OBSTACLE);
         }
+        playerPos = new Index2D(0, 0);
+        enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         drawMap();
     }
 }
