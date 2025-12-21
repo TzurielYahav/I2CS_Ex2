@@ -193,6 +193,8 @@ public class Ex2_GUI
 
     private static void updateEnemy()
     {
+        if (targetX == playerX && targetY == playerY)
+            return;
         if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
         {
             Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), OBSTACLE, false);
@@ -293,7 +295,10 @@ public class Ex2_GUI
     private static void drawCell(int x, int y)
     {
         StdDraw.setPenColor(COLORS[map.getPixel(x, y)]);
-        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
+        if (StdDraw.getPenColor() == StdDraw.WHITE)
+            StdDraw.filledRectangle(x + 0.5, y + 0.5, 0.5, 0.5);
+        else
+            StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
     }
 
     private static void drawGrid()
