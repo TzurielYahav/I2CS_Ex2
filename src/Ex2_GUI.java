@@ -16,6 +16,8 @@ import java.util.Scanner;
  */
 public class Ex2_GUI
 {
+    private static final int PLAYER = 1;
+    private static final int ENEMY = 2;
     private static final int OBSTACLE = 3;
     private static Map2D map;
     private static final Color[] COLORS = {
@@ -49,8 +51,8 @@ public class Ex2_GUI
 
 
         drawGrid();
-        drawPlayer(playerPos);
-        drawEnemy(enemyPos);
+        drawCharacter(playerPos, playerPos, PLAYER);
+        drawCharacter(enemyPos, enemyPos, ENEMY);
 //        StdDraw.setPenRadius(0.005);
 //        StdDraw.setPenColor(StdDraw.BLACK);
 //        drawArea(po1,po2, xx[0], 10, samples);
@@ -178,24 +180,6 @@ public class Ex2_GUI
         updateEnemy();
     }
 
-    private static void drawPlayer(Pixel2D newPos)
-    {
-        map.setPixel(playerPos, 0);
-        drawCell(playerPos);
-        map.setPixel(newPos, 1);
-        drawCell(newPos);
-        playerPos = newPos;
-    }
-
-    private static void drawEnemy(Pixel2D newPos)
-    {
-        map.setPixel(enemyPos, 0);
-        drawCell(newPos);
-        map.setPixel(newPos, 2);
-        drawCell(newPos);
-        enemyPos = newPos;
-    }
-
     private static void updateEnemy()
     {
         if (enemyPos.equals(playerPos))
@@ -210,7 +194,9 @@ public class Ex2_GUI
             compareWaypoints(waypointsArr);
             targetPos = new Index2D(playerPos.getX(), playerPos.getY());
         }
-        drawEnemy(waypoints.getFirst());
+        Pixel2D waypoint = waypoints.getFirst();
+        drawCharacter(enemyPos, waypoint, ENEMY);
+        enemyPos = waypoint;
         waypoints.removeFirst();
     }
 
@@ -281,7 +267,25 @@ public class Ex2_GUI
         if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE && (newPlayerX != playerX || newPlayerY != playerY))
         {
             drawPlayer(newPlayerX, newPlayerY);
+            playerPos = newPos;
         }
+    }
+
+    private static void drawPlayer(Pixel2D newPos)
+    {
+        map.setPixel(playerPos, 0);
+        drawCell(playerPos);
+        map.setPixel(newPos, 1);
+        drawCell(newPos);
+
+    }
+
+    private static void drawCharacter(Pixel2D oldPos, Pixel2D newPos, int color)
+    {
+        map.setPixel(oldPos, 0);
+        drawCell(oldPos);
+        map.setPixel(newPos, color);
+        drawCell(newPos);
     }
 
     private static void drawCell(Pixel2D pos)
