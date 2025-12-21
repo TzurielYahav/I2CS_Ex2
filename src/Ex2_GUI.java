@@ -264,10 +264,11 @@ public class Ex2_GUI
                 newPlayerY = map.getHeight() - 1;
         if (newPlayerY < 0)
                 newPlayerY = 0;
-        if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE && (newPlayerX != playerX || newPlayerY != playerY))
+        Pixel2D newPlayerPos = new Index2D(newPlayerX, newPlayerY);
+        if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE && !playerPos.equals(newPlayerPos))
         {
-            drawPlayer(newPlayerX, newPlayerY);
-            playerPos = newPos;
+            drawCharacter(playerPos, newPlayerPos, PLAYER);
+            playerPos = newPlayerPos;
         }
     }
 
