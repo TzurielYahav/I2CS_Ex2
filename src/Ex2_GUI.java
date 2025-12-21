@@ -16,9 +16,11 @@ import java.util.Scanner;
  */
 public class Ex2_GUI
 {
-    private static final int PLAYER = 1;
-    private static final int ENEMY = 2;
-    private static final int OBSTACLE = 3;
+    private static final int FLOOR_VALUE = 0;
+    private static final int PLAYER_VALUE = 1;
+    private static final int ENEMY_VALUE = 2;
+    private static final int OBSTACLE_VALUE = 3;
+    private static final int FRUIT_VALUE = 4;
     private static final int ENEMY_FRAME_TIMER_MAX = 4;
     private static Map2D map;
     private static final Color[] COLORS = {
@@ -28,16 +30,10 @@ public class Ex2_GUI
             StdDraw.BLACK,
             StdDraw.YELLOW
     };
-//    private static int playerX = 0;
-//    private static int playerY = 0;
-//    private static int enemyX = 0;
-//    private static int enemyY = 0;
     private static Pixel2D playerPos = new Index2D(0,0);
     private static Pixel2D enemyPos = new Index2D(0,0);
     private static Pixel2D targetPos = new Index2D(0,0);
     private static int enemyTimer = 0;
-//    private static int targetX = 0;
-//    private static int targetY = 0;
     private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
     private static boolean isGameRunning = false;
 
@@ -53,8 +49,8 @@ public class Ex2_GUI
 
 
         drawGrid();
-        drawCharacter(playerPos, playerPos, PLAYER);
-        drawCharacter(enemyPos, enemyPos, ENEMY);
+        drawCharacter(playerPos, playerPos, PLAYER_VALUE);
+        drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
 //        StdDraw.setPenRadius(0.005);
 //        StdDraw.setPenColor(StdDraw.BLACK);
 //        drawArea(po1,po2, xx[0], 10, samples);
@@ -188,7 +184,7 @@ public class Ex2_GUI
             return;
         if (!targetPos.equals(playerPos) || waypoints.isEmpty())
         {
-            Pixel2D[] waypointsArr = map.shortestPath(enemyPos, playerPos, OBSTACLE, false);
+            Pixel2D[] waypointsArr = map.shortestPath(enemyPos, playerPos, OBSTACLE_VALUE, false);
             if (waypointsArr == null)
             {
                 return;
@@ -197,7 +193,7 @@ public class Ex2_GUI
             targetPos = new Index2D(playerPos.getX(), playerPos.getY());
         }
         Pixel2D waypoint = waypoints.getFirst();
-        drawCharacter(enemyPos, waypoint, ENEMY);
+        drawCharacter(enemyPos, waypoint, ENEMY_VALUE);
         enemyPos = waypoint;
         waypoints.removeFirst();
     }
@@ -267,16 +263,16 @@ public class Ex2_GUI
         if (newPlayerY < 0)
                 newPlayerY = 0;
         Pixel2D newPlayerPos = new Index2D(newPlayerX, newPlayerY);
-        if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE && !playerPos.equals(newPlayerPos))
+        if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE_VALUE && !playerPos.equals(newPlayerPos))
         {
-            drawCharacter(playerPos, newPlayerPos, PLAYER);
+            drawCharacter(playerPos, newPlayerPos, PLAYER_VALUE);
             playerPos = newPlayerPos;
         }
     }
 
     private static void drawCharacter(Pixel2D oldPos, Pixel2D newPos, int color)
     {
-        map.setPixel(oldPos, 0);
+        map.setPixel(oldPos, FLOOR_VALUE);
         drawCell(oldPos);
         map.setPixel(newPos, color);
         drawCell(newPos);
@@ -285,72 +281,69 @@ public class Ex2_GUI
     private static void drawCell(Pixel2D pos)
     {
         StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
-        if (StdDraw.getPenColor() == StdDraw.WHITE)
+        if (map.getPixel(pos) == FLOOR_VALUE)
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
-        else
+        else if (map.getPixel(pos) == PLAYER_VALUE)
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5);
+        else if (map.getPixel(pos) == ENEMY_VALUE)
+            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5);
+        else if (map.getPixel(pos) == OBSTACLE_VALUE)
+            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
+        else if (map.getPixel(pos) == FRUIT_VALUE)
+            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.2);
     }
 
     private static void drawGrid()
     {
-
-//        StdDraw.setPenColor(StdDraw.BLACK);
-//        drawArea(po1,po2, xx[0], 10, samples);
-//        StdDraw.setPenColor(StdDraw.BLUE);
-//        drawPoly(po1, min, max,n);
-//        drawInfo(po2,0,8);
-//        StdDraw.setPenColor(StdDraw.GREEN);
-//        drawPoly(po2, min, max,n);
-//        drawInfo(po1,0,7);
-
-        // ==== Grid ====
-        StdDraw.setPenRadius(0.01);
-        StdDraw.setPenColor(StdDraw.GRAY);
-        for (int i = 0; i < map.getHeight(); i++)
-        {
-            StdDraw.line(0,i + 0.5,map.getWidth(),i + 0.5);
-        }
-        for (int i = 0; i < map.getWidth(); i++)
-        {
-            StdDraw.line(i + 0.5,0,i + 0.5,map.getHeight());
-        }
-
-        // ==== Cells ====
-        //StdDraw.setPenRadius(1);
         for (int y = 0; y < map.getHeight(); y++)
         {
             for (int x = 0; x < map.getWidth(); x++)
             {
                 StdDraw.setPenColor(COLORS[map.getPixel(x, y)]);
-                StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
+                StdDraw.filledRectangle(x + 0.5, y + 0.5, 1);
             }
         }
     }
 
     private static void changeLevel(int level)
     {
-
         if (level == 1)
         {
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
-            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE);
+            playerPos = new Index2D(0, 0);
+            enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
+            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE_VALUE);
         }
         if (level == 2)
         {
-            int[][] mapArr = new int[29][26];
+            int[][] mapArr = new int[14][26];
             map.init(mapArr);
-            map.drawRect(new Index2D(0,10), new Index2D(4,20), OBSTACLE);
-            map.drawRect(new Index2D(25,10), new Index2D(21,20), OBSTACLE);
-            map.drawRect(new Index2D(1,1), new Index2D(10,2), OBSTACLE);
-            map.drawRect(new Index2D(15,1), new Index2D(24,2), OBSTACLE);
-            map.drawRect(new Index2D(6,3), new Index2D(7,5), OBSTACLE);
-            map.drawRect(new Index2D(18,3), new Index2D(19,5), OBSTACLE);
-            map.drawRect(new Index2D(12,1), new Index2D(13,3), OBSTACLE);
-            map.drawRect(new Index2D(9,4), new Index2D(16,5), OBSTACLE);
+            playerPos = new Index2D(0, 0);
+            enemyPos = new Index2D(map.getWidth() / 2, map.getHeight() - 1);
+            map.drawRect(new Index2D(0,10), new Index2D(4,13), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(25,10), new Index2D(21,13), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(1,1), new Index2D(10,2), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(15,1), new Index2D(24,2), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(6,3), new Index2D(7,5), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(18,3), new Index2D(19,5), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(12,1), new Index2D(13,3), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(9,4), new Index2D(16,5), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(0,4), new Index2D(1,5), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(24,4), new Index2D(25,5), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(3,4), new Index2D(4,8), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(21,4), new Index2D(22,8), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(1,7), new Index2D(4,8), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(21,7), new Index2D(24,8), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(6,7), new Index2D(10,8), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(15,7), new Index2D(19,8), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(12,7), new Index2D(13,9), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(9,10), new Index2D(16,11), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(6,10), new Index2D(7,13), OBSTACLE_VALUE);
+            map.drawRect(new Index2D(18,10), new Index2D(19,13), OBSTACLE_VALUE);
+            map.fill(playerPos, FRUIT_VALUE, false);
         }
-        playerPos = new Index2D(0, 0);
-        enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
+        waypoints.clear();
         drawMap();
     }
 }
