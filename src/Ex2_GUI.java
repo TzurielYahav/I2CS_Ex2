@@ -183,21 +183,27 @@ public class Ex2_GUI
 
     private static void drawEnemy(double x, double y)
     {
-        map.setPixel((int)enemyX, (int)enemyY, 0);
-        drawCell((int)enemyX, (int)enemyY);
-        map.setPixel((int)x, (int)y, 2);
-        drawCell((int)x, (int)y);
+        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.filledRectangle(enemyX + 0.5, enemyY + 0.5, 0.5, 0.5);
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
         enemyX = x;
         enemyY = y;
     }
 
     private static void updateEnemy()
     {
-        if (targetX == playerX && targetY == playerY)
+        if (enemyX == playerX && enemyY == playerY)
             return;
         if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
         {
-            Pixel2D[] waypointsArr = map.shortestPath(new Index2D((int)enemyX, (int)enemyY), new Index2D(playerX, playerY), OBSTACLE, false);
+            int curPosX = (int) enemyX;
+            int curPosY = (int) enemyY;
+            if (targetX > enemyX)
+                curPosX++;
+            if (targetY > enemyY)
+                curPosY++;
+            Pixel2D[] waypointsArr = map.shortestPath(new Index2D(curPosX, curPosY), new Index2D(playerX, playerY), OBSTACLE, false);
             if (waypointsArr == null)
             {
                 return;
@@ -232,18 +238,26 @@ public class Ex2_GUI
 
     private static void compareWaypoints(Pixel2D[] waypointsArr)
     {
-        for (int i = 1; i < waypointsArr.length; i++)
+
+        for (int i = 0; i < waypointsArr.length; i++)
         {
-            if (i - 1 < waypoints.size())
+            if (i < waypoints.size())
             {
-                if (!waypointsArr[i].equals(waypoints.get(i - 1)))
+                if (!waypointsArr[i].equals(waypoints.get(i)))
                 {
-                    waypoints.set(i - 1, waypointsArr[i]);
+                    waypoints.set(i, waypointsArr[i]);
                 }
             }
             else
             {
                 waypoints.add(waypointsArr[i]);
+            }
+        }
+        if (waypointsArr.length < waypoints.size())
+        {
+            for (int i = waypoints.size(); i > waypointsArr.length; i--)
+            {
+                waypoints.removeLast();
             }
         }
     }
