@@ -21,7 +21,7 @@ public class Ex2_GUI
     private static final int ENEMY_VALUE = 2;
     private static final int OBSTACLE_VALUE = 3;
     private static final int FRUIT_VALUE = 4;
-    private static final int ENEMY_FRAME_TIMER_MAX = 4;
+    private static int enemyFrameTimerMax = 4;
     private static Map2D map;
     private static final Color[] COLORS = {
             StdDraw.WHITE,
@@ -171,7 +171,7 @@ public class Ex2_GUI
     private static void update()
     {
         processInput();
-        if (enemyTimer == ENEMY_FRAME_TIMER_MAX)
+        if (enemyTimer == enemyFrameTimerMax)
             enemyTimer = 0;
         if (enemyTimer == 0)
             updateEnemy();
@@ -284,9 +284,9 @@ public class Ex2_GUI
         if (map.getPixel(pos) == FLOOR_VALUE)
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         else if (map.getPixel(pos) == PLAYER_VALUE)
-            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5);
+            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == ENEMY_VALUE)
-            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5);
+            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == OBSTACLE_VALUE)
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         else if (map.getPixel(pos) == FRUIT_VALUE)
@@ -299,8 +299,7 @@ public class Ex2_GUI
         {
             for (int x = 0; x < map.getWidth(); x++)
             {
-                StdDraw.setPenColor(COLORS[map.getPixel(x, y)]);
-                StdDraw.filledRectangle(x + 0.5, y + 0.5, 1);
+                drawCell(new Index2D(x, y));
             }
         }
     }
@@ -309,6 +308,7 @@ public class Ex2_GUI
     {
         if (level == 1)
         {
+            enemyFrameTimerMax = 4;
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
@@ -317,6 +317,7 @@ public class Ex2_GUI
         }
         if (level == 2)
         {
+            enemyFrameTimerMax = 2;
             int[][] mapArr = new int[14][26];
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
