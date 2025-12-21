@@ -28,16 +28,16 @@ public class Ex2_GUI
             StdDraw.BLACK,
             StdDraw.YELLOW
     };
-    private static int playerX = 0;
-    private static int playerY = 0;
-    private static int enemyX = 0;
-    private static int enemyY = 0;
+//    private static int playerX = 0;
+//    private static int playerY = 0;
+//    private static int enemyX = 0;
+//    private static int enemyY = 0;
     private static Pixel2D playerPos = new Index2D(0,0);
     private static Pixel2D enemyPos = new Index2D(0,0);
     private static Pixel2D targetPos = new Index2D(0,0);
     private static int enemyTimer = 0;
-    private static int targetX = 0;
-    private static int targetY = 0;
+//    private static int targetX = 0;
+//    private static int targetY = 0;
     private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
     private static boolean isGameRunning = false;
 
@@ -151,11 +151,6 @@ public class Ex2_GUI
     {
         long MS_PER_FRAME = 200;
         isGameRunning = true;
-        playerX = 0;
-        playerY = 0;
-        enemyX = map.getWidth() - 1;
-        enemyY = map.getHeight() - 1;
-
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         targetPos = new Index2D(0, 0);
@@ -247,7 +242,7 @@ public class Ex2_GUI
             }
             if (key == 'q') isGameRunning = false;
 
-            if (newPlayerX == playerX && newPlayerY == playerY)
+            if (newPlayerX == playerPos.getX() && newPlayerY == playerPos.getY())
             {
                 if (key == 'w') newPlayerY += 1;
                 else if (key == 's') newPlayerY -= 1;
@@ -255,7 +250,7 @@ public class Ex2_GUI
                 else if (key == 'd') newPlayerX += 1;
             }
         }
-        if (newPlayerX != playerX || newPlayerY != playerY)
+        if (newPlayerX != playerPos.getX() || newPlayerY != playerPos.getY())
         {
             updatePlayer(newPlayerX, newPlayerY);
         }
