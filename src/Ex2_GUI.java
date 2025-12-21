@@ -186,7 +186,10 @@ public class Ex2_GUI
     private static void updateEnemy()
     {
         if (enemyPos.equals(playerPos))
+        {
+            gameOver();
             return;
+        }
         if (!targetPos.equals(playerPos) || waypoints.isEmpty())
         {
             Pixel2D[] waypointsArr = map.shortestPath(enemyPos, playerPos, OBSTACLE_VALUE, false);
@@ -351,5 +354,18 @@ public class Ex2_GUI
         }
         waypoints.clear();
         drawMap();
+    }
+
+    private static void gameOver()
+    {
+        double centerX = (double) map.getWidth() / 2;
+        double centerY = (double) (map.getHeight() + (map.getHeight() / 10)) / 2;
+        isGameRunning = false;
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.filledRectangle(centerX, centerY, 3, 2);
+        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.rectangle(centerX, centerY, 3, 2);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.text(centerX, centerY, "Game Over");
     }
 }
