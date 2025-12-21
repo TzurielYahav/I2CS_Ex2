@@ -203,13 +203,13 @@ public class Ex2_GUI
     private static void compareWaypoints(Pixel2D[] waypointsArr)
     {
 
-        for (int i = 0; i < waypointsArr.length; i++)
+        for (int i = 1; i < waypointsArr.length; i++)
         {
-            if (i < waypoints.size())
+            if (i - 1 < waypoints.size())
             {
-                if (!waypointsArr[i].equals(waypoints.get(i)))
+                if (!waypointsArr[i].equals(waypoints.get(i - 1)))
                 {
-                    waypoints.set(i, waypointsArr[i]);
+                    waypoints.set(i - 1, waypointsArr[i]);
                 }
             }
             else
@@ -269,15 +269,6 @@ public class Ex2_GUI
             drawPlayer(newPlayerX, newPlayerY);
             playerPos = newPos;
         }
-    }
-
-    private static void drawPlayer(Pixel2D newPos)
-    {
-        map.setPixel(playerPos, 0);
-        drawCell(playerPos);
-        map.setPixel(newPos, 1);
-        drawCell(newPos);
-
     }
 
     private static void drawCharacter(Pixel2D oldPos, Pixel2D newPos, int color)
