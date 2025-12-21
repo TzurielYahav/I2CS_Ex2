@@ -27,10 +27,12 @@ public class Ex2_GUI
     };
     private static int playerX = 0;
     private static int playerY = 0;
-    private static double enemyX = 0;
-    private static double enemyY = 0;
-    private static double targetX = 0;
-    private static double targetY = 0;
+    private static int enemyX = 0;
+    private static int enemyY = 0;
+    private static Pixel2D playerPos = new Index2D(0,0);
+    private static Pixel2D enemyPos = new Index2D(0,0);
+    private static int targetX = 0;
+    private static int targetY = 0;
     private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
     private static boolean isGameRunning = false;
 
@@ -147,7 +149,9 @@ public class Ex2_GUI
         playerX = 0;
         playerY = 0;
         enemyX = map.getWidth() - 1;
-        enemyY  = map.getHeight() - 1;
+        enemyY = map.getHeight() - 1;
+        playerPos = new Index2D(0, 0);
+        enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         drawMap();
 
         long previousTime = System.currentTimeMillis();
@@ -171,24 +175,22 @@ public class Ex2_GUI
         updateEnemy();
     }
 
-    private static void drawPlayer(int x, int y)
+    private static void drawPlayer(Pixel2D newPos)
     {
-        map.setPixel(playerX, playerY, 0);
-        drawCell(playerX, playerY);
-        map.setPixel(x, y, 1);
-        drawCell(x, y);
-        playerX = x;
-        playerY = y;
+        map.setPixel(playerPos, 0);
+        drawCell(playerPos);
+        map.setPixel(newPos, 1);
+        drawCell(newPos);
+        playerPos = newPos;
     }
 
-    private static void drawEnemy(double x, double y)
+    private static void drawEnemy(Pixel2D newPos)
     {
-        StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.filledRectangle(enemyX + 0.5, enemyY + 0.5, 0.5, 0.5);
-        StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
-        enemyX = x;
-        enemyY = y;
+        map.setPixel(enemyPos, 0);
+        drawCell(newPos);
+        map.setPixel(newPos, 2);
+        drawCell(newPos);
+        enemyPos = newPos;
     }
 
     private static void updateEnemy()
@@ -197,13 +199,7 @@ public class Ex2_GUI
             return;
         if (targetX != playerX || targetY != playerY || waypoints.isEmpty())
         {
-            int curPosX = (int) enemyX;
-            int curPosY = (int) enemyY;
-            if (targetX > enemyX)
-                curPosX++;
-            if (targetY > enemyY)
-                curPosY++;
-            Pixel2D[] waypointsArr = map.shortestPath(new Index2D(curPosX, curPosY), new Index2D(playerX, playerY), OBSTACLE, false);
+            Pixel2D[] waypointsArr = map.shortestPath(new Index2D(enemyX, enemyY), new Index2D(playerX, playerY), OBSTACLE, false);
             if (waypointsArr == null)
             {
                 return;
@@ -213,27 +209,8 @@ public class Ex2_GUI
             targetY = playerY;
         }
         Pixel2D waypoint = waypoints.getFirst();
-        if (waypoint.equals(new Index2D((int)enemyX, (int)enemyY)))
-            waypoints.removeFirst();
-
-        double newEnemyX = enemyX;
-        double newEnemyY = enemyY;
-        if (waypoint.getX() > enemyX)
-            newEnemyX += 0.25;
-        else if (waypoint.getX() < enemyX)
-            newEnemyX -= 0.25;
-        else if (waypoint.getY() > enemyY)
-            newEnemyY += 0.25;
-        else if (waypoint.getY() < enemyY)
-            newEnemyY -= 0.25;
-
-//        double newEnemyX = (enemyX + ((double) waypoint.getX() - enemyX) * 0.1);
-//        double newEnemyY = (enemyY + ((double) waypoint.getY() - enemyY) * 0.1);
-
-        if (newEnemyX != enemyX || newEnemyY != enemyY)
-        {
-            drawEnemy(newEnemyX, newEnemyY);
-        }
+        waypoints.removeFirst();
+        drawEnemy(newEnemyX, newEnemyY);
     }
 
     private static void compareWaypoints(Pixel2D[] waypointsArr)
@@ -306,13 +283,13 @@ public class Ex2_GUI
         }
     }
 
-    private static void drawCell(int x, int y)
+    private static void drawCell(Pixel2D pos)
     {
-        StdDraw.setPenColor(COLORS[map.getPixel(x, y)]);
+        StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
         if (StdDraw.getPenColor() == StdDraw.WHITE)
-            StdDraw.filledRectangle(x + 0.5, y + 0.5, 0.5, 0.5);
+            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         else
-            StdDraw.filledCircle(x + 0.5, y + 0.5, 0.5);
+            StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5);
     }
 
     private static void drawGrid()
