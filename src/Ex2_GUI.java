@@ -19,6 +19,7 @@ public class Ex2_GUI
     private static final int PLAYER = 1;
     private static final int ENEMY = 2;
     private static final int OBSTACLE = 3;
+    private static final int ENEMY_FRAME_TIMER_MAX = 4;
     private static Map2D map;
     private static final Color[] COLORS = {
             StdDraw.WHITE,
@@ -34,6 +35,7 @@ public class Ex2_GUI
     private static Pixel2D playerPos = new Index2D(0,0);
     private static Pixel2D enemyPos = new Index2D(0,0);
     private static Pixel2D targetPos = new Index2D(0,0);
+    private static int enemyTimer = 0;
     private static int targetX = 0;
     private static int targetY = 0;
     private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
@@ -157,6 +159,7 @@ public class Ex2_GUI
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         targetPos = new Index2D(0, 0);
+        enemyTimer = 0;
         drawMap();
 
         long previousTime = System.currentTimeMillis();
@@ -177,7 +180,11 @@ public class Ex2_GUI
     private static void update()
     {
         processInput();
-        updateEnemy();
+        if (enemyTimer == ENEMY_FRAME_TIMER_MAX)
+            enemyTimer = 0;
+        if (enemyTimer == 0)
+            updateEnemy();
+        enemyTimer++;
     }
 
     private static void updateEnemy()
@@ -228,8 +235,8 @@ public class Ex2_GUI
 
     private static void processInput()
     {
-        int newPlayerX = playerX;
-        int newPlayerY = playerY;
+        int newPlayerX = playerPos.getX();
+        int newPlayerY = playerPos.getY();
         while (StdDraw.hasNextKeyTyped())
         {
             char key = StdDraw.nextKeyTyped();
