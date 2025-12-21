@@ -38,28 +38,18 @@ public class Ex2_GUI
     private static boolean isGameRunning = false;
 
 
-
     public static void drawMap()
     {
         double maxX = map.getWidth(), maxY = map.getHeight();
-//        int samples = 16;
         StdDraw.setXscale(0,maxX);
-        StdDraw.setYscale(0,maxY);
+        StdDraw.setYscale(0,maxY + (maxY / 10));
         StdDraw.clear();
 
-
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.text(maxX / 2, maxY + (maxY / 20), "Controls - 'WASD' for movement  |  '1' / '2' to switch levels  |   'Q' to exit");
         drawGrid();
         drawCharacter(playerPos, playerPos, PLAYER_VALUE);
         drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
-//        StdDraw.setPenRadius(0.005);
-//        StdDraw.setPenColor(StdDraw.BLACK);
-//        drawArea(po1,po2, xx[0], 10, samples);
-//        StdDraw.setPenColor(StdDraw.BLUE);
-//        drawPoly(po1, min, max,n);
-//        drawInfo(po2,0,8);
-//        StdDraw.setPenColor(StdDraw.GREEN);
-//        drawPoly(po2, min, max,n);
-//        drawInfo(po1,0,7);
     }
 
     /**
