@@ -100,6 +100,7 @@ public class Ex2_GUI
         try
         {
             FileWriter myWriter = new FileWriter(mapFileName);
+
             for (int i = 0; i < mapArr.length; i++) {
                 for (int j = 0; j < mapArr[i].length; j++) {
                     myWriter.write(mapArr[i][j] + ",");
@@ -193,7 +194,7 @@ public class Ex2_GUI
         }
         if (!targetPos.equals(playerPos) || waypoints.isEmpty())
         {
-            Pixel2D[] waypointsArr = map.shortestPath(enemyPos, playerPos, OBSTACLE_VALUE, false);
+            Pixel2D[] waypointsArr = map.shortestPath(enemyPos, playerPos, OBSTACLE_VALUE, cyclic);
             if (waypointsArr == null)
             {
                 return;
