@@ -65,6 +65,11 @@ public class Ex2_GUI
             File myFile = new File(mapFileName);
             Scanner myReader = new Scanner(myFile);
             ArrayList<String[]> rowList = new ArrayList<>();
+            if (myReader.hasNextLine())
+            {
+                String data = myReader.nextLine();
+                cyclic = data.equals("true");
+            }
             while (myReader.hasNextLine())
             {
                 String data = myReader.nextLine();
@@ -100,7 +105,7 @@ public class Ex2_GUI
         try
         {
             FileWriter myWriter = new FileWriter(mapFileName);
-
+            myWriter.write(cyclic + "\n");
             for (int i = 0; i < mapArr.length; i++) {
                 for (int j = 0; j < mapArr[i].length; j++) {
                     myWriter.write(mapArr[i][j] + ",");
