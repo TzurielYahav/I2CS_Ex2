@@ -21,7 +21,7 @@ public class Ex2_GUI
     private static final int ENEMY_VALUE = 2;
     private static final int OBSTACLE_VALUE = 3;
     private static final int FRUIT_VALUE = 4;
-    private static final int ENEMY_FRAME_TIMER_MAX = 4;
+    private static final int ENEMY_FRAME_TIMER_MAX = 2;
     private static Map2D map;
     private static final Color[] COLORS = {
             StdDraw.WHITE,
@@ -46,7 +46,7 @@ public class Ex2_GUI
         StdDraw.clear();
 
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(maxX / 2, maxY + (maxY / 20), "Controls - 'WASD' for movement  |  '1' / '2' to switch levels  |   'Q' to exit");
+        StdDraw.text(maxX / 2, maxY + (maxY / 20), "Controls - 'WASD' for movement  |  Numbers to switch levels  |   'Q' to SAVE and exit");
         drawGrid();
         drawCharacter(playerPos, playerPos, PLAYER_VALUE);
         drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
@@ -363,18 +363,19 @@ public class Ex2_GUI
 
     private static void gameOver()
     {
+        double centerX = (double) map.getWidth() / 2;
+        double centerY = (double) (map.getHeight() + (map.getHeight() / 10)) / 2;
+        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.filledRectangle(centerX, centerY, centerX / 2, centerY / 2);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.01);
+        StdDraw.rectangle(centerX, centerY, centerX / 2, centerY / 2);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.text(centerX, centerY, "Game Over");
         isGameRunning = false;
         int[][] mapArr = new int[10][10];
         map.init(mapArr);
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
-        double centerX = (double) map.getWidth() / 2;
-        double centerY = (double) (map.getHeight() + (map.getHeight() / 10)) / 2;
-        StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.filledRectangle(centerX, centerY, 5, 2);
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.rectangle(centerX, centerY, 5, 2);
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(centerX, centerY, "Game Over");
     }
 }
