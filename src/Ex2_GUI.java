@@ -21,13 +21,13 @@ public class Ex2_GUI
     private static final int ENEMY_VALUE = 2;
     private static final int OBSTACLE_VALUE = 3;
     private static final int FRUIT_VALUE = 4;
-    private static final int ENEMY_FRAME_TIMER_MAX = 2;
+    private static final int ENEMY_FRAME_MOVEMENT_DELAY = 2;
     private static Map2D map;
     private static final Color[] COLORS = {
-            StdDraw.BOOK_BLUE,
+            StdDraw.DARK_GRAY,
             StdDraw.BLUE,
             StdDraw.RED,
-            StdDraw.BLACK,
+            StdDraw.MAGENTA,
             StdDraw.YELLOW
     };
     private static Pixel2D playerPos = new Index2D(0,0);
@@ -46,7 +46,7 @@ public class Ex2_GUI
         StdDraw.clear();
 
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(maxX / 2, maxY + (maxY / 20), "Controls - 'WASD' for movement  |  Numbers to switch levels  |   'Q' to SAVE and exit");
+        StdDraw.text(maxX / 2, maxY + (maxY / 20), "'WASD' for movement  |  Numbers to switch levels  |  'Q' to stop and save");
         drawGrid();
         drawCharacter(playerPos, playerPos, PLAYER_VALUE);
         drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
@@ -176,7 +176,7 @@ public class Ex2_GUI
     private static void update()
     {
         processInput();
-        if (enemyTimer == ENEMY_FRAME_TIMER_MAX)
+        if (enemyTimer == ENEMY_FRAME_MOVEMENT_DELAY)
             enemyTimer = 0;
         if (enemyTimer == 0)
             updateEnemy();
@@ -300,7 +300,9 @@ public class Ex2_GUI
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         else if (map.getPixel(pos) == FRUIT_VALUE)
         {
+            StdDraw.setPenColor(COLORS[FLOOR_VALUE]);
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
+            StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.2);
         }
     }
