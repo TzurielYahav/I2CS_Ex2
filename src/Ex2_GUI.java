@@ -290,7 +290,7 @@ public class Ex2_GUI
     {
         StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
 
-        else if (map.getPixel(pos) == PLAYER_VALUE)
+        if (map.getPixel(pos) == PLAYER_VALUE)
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == ENEMY_VALUE)
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
