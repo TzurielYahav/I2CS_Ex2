@@ -21,7 +21,7 @@ public class Ex2_GUI
     private static final int ENEMY_VALUE = 2;
     private static final int OBSTACLE_VALUE = 3;
     private static final int FRUIT_VALUE = 4;
-    private static int enemyFrameTimerMax = 4;
+    private static final int ENEMY_FRAME_TIMER_MAX = 4;
     private static Map2D map;
     private static final Color[] COLORS = {
             StdDraw.WHITE,
@@ -176,7 +176,7 @@ public class Ex2_GUI
     private static void update()
     {
         processInput();
-        if (enemyTimer == enemyFrameTimerMax)
+        if (enemyTimer == ENEMY_FRAME_TIMER_MAX)
             enemyTimer = 0;
         if (enemyTimer == 0)
             updateEnemy();
@@ -316,7 +316,6 @@ public class Ex2_GUI
     {
         if (level == 1)
         {
-            enemyFrameTimerMax = 4;
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
@@ -324,7 +323,6 @@ public class Ex2_GUI
         }
         if (level == 2)
         {
-            enemyFrameTimerMax = 4;
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
@@ -333,7 +331,6 @@ public class Ex2_GUI
         }
         if (level == 3)
         {
-            enemyFrameTimerMax = 2;
             int[][] mapArr = new int[14][26];
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
@@ -367,7 +364,6 @@ public class Ex2_GUI
     private static void gameOver()
     {
         isGameRunning = false;
-        enemyFrameTimerMax = 4;
         int[][] mapArr = new int[10][10];
         map.init(mapArr);
         playerPos = new Index2D(0, 0);
