@@ -321,9 +321,17 @@ public class Ex2_GUI
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
             enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
-            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE_VALUE);
         }
         if (level == 2)
+        {
+            enemyFrameTimerMax = 4;
+            int[][] mapArr = new int[10][10];
+            map.init(mapArr);
+            playerPos = new Index2D(0, 0);
+            enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
+            map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE_VALUE);
+        }
+        if (level == 3)
         {
             enemyFrameTimerMax = 2;
             int[][] mapArr = new int[14][26];
@@ -358,15 +366,19 @@ public class Ex2_GUI
 
     private static void gameOver()
     {
+        isGameRunning = false;
+        enemyFrameTimerMax = 4;
+        int[][] mapArr = new int[10][10];
+        map.init(mapArr);
+        playerPos = new Index2D(0, 0);
+        enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         double centerX = (double) map.getWidth() / 2;
         double centerY = (double) (map.getHeight() + (map.getHeight() / 10)) / 2;
-        isGameRunning = false;
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.filledRectangle(centerX, centerY, 5, 2);
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.rectangle(centerX, centerY, 5, 2);
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.text(centerX, centerY, "Game Over");
-
     }
 }
