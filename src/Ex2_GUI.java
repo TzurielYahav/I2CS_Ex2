@@ -24,7 +24,7 @@ public class Ex2_GUI
     private static final int ENEMY_FRAME_TIMER_MAX = 2;
     private static Map2D map;
     private static final Color[] COLORS = {
-            StdDraw.WHITE,
+            StdDraw.BOOK_BLUE,
             StdDraw.BLUE,
             StdDraw.RED,
             StdDraw.BLACK,
@@ -289,16 +289,20 @@ public class Ex2_GUI
     private static void drawCell(Pixel2D pos)
     {
         StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
-        if (map.getPixel(pos) == FLOOR_VALUE)
-            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
+
         else if (map.getPixel(pos) == PLAYER_VALUE)
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == ENEMY_VALUE)
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == OBSTACLE_VALUE)
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
+        else if (map.getPixel(pos) == FLOOR_VALUE)
+            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         else if (map.getPixel(pos) == FRUIT_VALUE)
+        {
+            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.2);
+        }
     }
 
     private static void drawGrid()
