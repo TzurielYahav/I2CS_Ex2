@@ -367,5 +367,6 @@ public class Ex2_GUI
         StdDraw.rectangle(centerX, centerY, 5, 2);
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.text(centerX, centerY, "Game Over");
+
     }
 }
