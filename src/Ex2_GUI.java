@@ -327,7 +327,7 @@ public class Ex2_GUI
             playerPos = new Index2D(0, 0);
             enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         }
-        if (level == 2)
+        else if (level == 2)
         {
             int[][] mapArr = new int[10][10];
             map.init(mapArr);
@@ -335,7 +335,7 @@ public class Ex2_GUI
             enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
             map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE_VALUE);
         }
-        if (level == 3)
+        else if (level == 3)
         {
             int[][] mapArr = new int[14][26];
             map.init(mapArr);
