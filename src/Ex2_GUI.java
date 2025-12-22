@@ -33,9 +33,10 @@ public class Ex2_GUI
     private static Pixel2D playerPos = new Index2D(0,0);
     private static Pixel2D enemyPos = new Index2D(0,0);
     private static Pixel2D targetPos = new Index2D(0,0);
-    private static int enemyTimer = 0;
+    private static int enemyDelayTimer = 0;
     private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
     private static boolean isGameRunning = false;
+    private static boolean cyclic = false;
 
 
     public static void drawMap()
@@ -136,7 +137,7 @@ public class Ex2_GUI
     private static void gameInit()
     {
         isGameRunning = true;
-        enemyTimer = 0;
+        enemyDelayTimer = 0;
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
         targetPos = playerPos;
@@ -176,11 +177,11 @@ public class Ex2_GUI
     private static void update()
     {
         processInput();
-        if (enemyTimer == ENEMY_FRAME_MOVEMENT_DELAY)
-            enemyTimer = 0;
-        if (enemyTimer == 0)
+        if (enemyDelayTimer == ENEMY_FRAME_MOVEMENT_DELAY)
+            enemyDelayTimer = 0;
+        if (enemyDelayTimer == 0)
             updateEnemy();
-        enemyTimer++;
+        enemyDelayTimer++;
     }
 
     private static void updateEnemy()
@@ -262,13 +263,27 @@ public class Ex2_GUI
 
     private static void updatePlayer(int newPlayerX, int newPlayerY)
     {
+        // ======== X ========
         if (newPlayerX >= map.getWidth())
+            if (cyclic)
+                newPlayerX = 0;
+            else
                 newPlayerX = map.getWidth() - 1;
         if (newPlayerX < 0)
+            if (cyclic)
+                newPlayerX = map.getWidth() - 1;
+            else
                 newPlayerX = 0;
+        // ======== Y ========
         if (newPlayerY >= map.getHeight())
+            if (cyclic)
+                newPlayerY = 0;
+            else
                 newPlayerY = map.getHeight() - 1;
         if (newPlayerY < 0)
+            if (cyclic)
+                newPlayerY = map.getHeight() - 1;
+            else
                 newPlayerY = 0;
         Pixel2D newPlayerPos = new Index2D(newPlayerX, newPlayerY);
         if (map.getPixel(newPlayerX, newPlayerY) != OBSTACLE_VALUE && !playerPos.equals(newPlayerPos))
@@ -326,6 +341,7 @@ public class Ex2_GUI
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
             enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
+            cyclic = false;
         }
         else if (level == 2)
         {
@@ -333,6 +349,7 @@ public class Ex2_GUI
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
             enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
+            cyclic = false;
             map.drawRect(new Index2D(3,3), new Index2D(6,6), OBSTACLE_VALUE);
         }
         else if (level == 3)
@@ -341,6 +358,7 @@ public class Ex2_GUI
             map.init(mapArr);
             playerPos = new Index2D(0, 0);
             enemyPos = new Index2D(map.getWidth() / 2, map.getHeight() - 1);
+            cyclic = false;
             map.drawRect(new Index2D(0,10), new Index2D(4,13), OBSTACLE_VALUE);
             map.drawRect(new Index2D(25,10), new Index2D(21,13), OBSTACLE_VALUE);
             map.drawRect(new Index2D(1,1), new Index2D(10,2), OBSTACLE_VALUE);
@@ -361,7 +379,17 @@ public class Ex2_GUI
             map.drawRect(new Index2D(9,10), new Index2D(16,11), OBSTACLE_VALUE);
             map.drawRect(new Index2D(6,10), new Index2D(7,13), OBSTACLE_VALUE);
             map.drawRect(new Index2D(18,10), new Index2D(19,13), OBSTACLE_VALUE);
-            map.fill(playerPos, FRUIT_VALUE, false);
+            map.fill(playerPos, FRUIT_VALUE, cyclic);
+        }
+        else  if (level == 4)
+        {
+            int[][] mapArr = new int[10][10];
+            map.init(mapArr);
+            playerPos = new Index2D(0, 0);
+            enemyPos = new Index2D(map.getWidth() - 3, map.getHeight() - 3);
+            cyclic = true;
+            map.drawLine(new Index2D(4,0), new Index2D(4,9), OBSTACLE_VALUE);
+            map.drawLine(new Index2D(0,4), new Index2D(9,4), OBSTACLE_VALUE);
         }
         waypoints.clear();
         drawMap();

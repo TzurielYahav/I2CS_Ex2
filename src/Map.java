@@ -15,9 +15,9 @@ public class Map implements Map2D, Serializable
 
 	/**
 	 * Constructs a w * h 2D raster map with an init value v.
-	 * @param w
-	 * @param h
-	 * @param v
+	 * @param w The width of the map
+	 * @param h The height of the map
+	 * @param v The initial value to put in all cells
 	 */
 	public Map(int w, int h, int v) {
         init(w, h, v);
@@ -25,7 +25,7 @@ public class Map implements Map2D, Serializable
 
     /**
 	 * Constructs a square map (size*size) with values of 0.
-	 * @param size
+	 * @param size The size of the square map
 	 */
 	public Map(int size) {
         this(size,size, 0);
@@ -33,21 +33,31 @@ public class Map implements Map2D, Serializable
 	
 	/**
 	 * Constructs a map from a given 2D array.
-	 * @param data
+	 * @param data The 2D int array of data to construct the map from
 	 */
 	public Map(int[][] data) {
 		init(data);
 	}
 
+    /**
+     * Creates a new 2D int array and puts v as the initial value of each cell.
+     *
+     * @param w the width of the underlying 2D array.
+     * @param h the height of the underlying 2D array.
+     * @param v the init value of all the entries in the 2D array.
+     */
     @Override
 	public void init(int w, int h, int v)
     {
         if (w <= 0 || h <= 0)
             throw new IllegalArgumentException("Invalid width or height parameter");
         _map = new int[h][w];
-        for (int i = 0; i < w * h; i++)
+        for (int i = 0; i < w; i++)
         {
-            _map[i / w][i % w] = v;
+            for (int j = 0; j < h; j++)
+            {
+                _map[j][i] = v;
+            }
         }
 	}
 
@@ -395,7 +405,7 @@ public class Map implements Map2D, Serializable
         double b = y1 - x1 * a;                     // compute the B element
         for (int y = y1; y <= y2; y++)
         {
-            double gy = (y + b) / a;
+            double gy = (x1 == x2) ? x1 : (y + b) / a;
             _map[y][(int) gy] = color;
         }
     }
