@@ -177,6 +177,7 @@ class MapTest {
 
         _m1.init(arr1);
         _m2.init(arr1);
+        _m3.fill(new Index2D(0,0),2, false);
         _m1.fill(new Index2D(0,0),2, false);
         _m2.fill(new Index2D(0,0),2, true);
 
