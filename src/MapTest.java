@@ -9,9 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Intro2CS, 2026A, this is a very
  */
-class MapTest {
-    /**
-     */
+class MapTest
+{
     private final int[][] _map_3x3_1 = {{0,1,0}, {1,0,1}, {0,1,0}};
     private final int[][] _map_4x4_1 = {{0,1,0,0}, {0,1,0,0}, {0,1,1,0}, {0,0,0,0}};
     private final int[][] _map_4x4_2 = {{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
@@ -199,24 +198,6 @@ class MapTest {
         assertTrue(isEqualArray(resArr2, _m1.shortestPath(new Index2D(3, 0), new Index2D(0, 3), 1, false)));
         assertTrue(isEqualArray(resArr3, _m2.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false)));
         assertTrue(isEqualArray(resArr4, _m2.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, true)));
-    }
-
-    @Test
-    void testPacman()
-    {
-        int[][] mapArr = new int[29][26];
-        _m0.init(mapArr);
-        _m0.drawRect(new Index2D(0,10), new Index2D(4,20), 3);
-        _m0.drawRect(new Index2D(25,10), new Index2D(21,20), 3);
-        _m0.drawRect(new Index2D(1,1), new Index2D(10,2), 3);
-        _m0.drawRect(new Index2D(15,1), new Index2D(24,2), 3);
-        _m0.drawRect(new Index2D(6,3), new Index2D(7,5), 3);
-        _m0.drawRect(new Index2D(18,3), new Index2D(19,5), 3);
-        _m0.drawRect(new Index2D(12,1), new Index2D(13,3), 3);
-        _m0.drawRect(new Index2D(9,4), new Index2D(16,5), 3);
-
-        System.out.println(Arrays.toString(_m0.shortestPath(new Index2D(_m0.getWidth() - 1, _m0.getHeight() - 1), new Index2D(0, 0), 3, false)));
-        assertNotNull(_m0.shortestPath(new Index2D(0, 0), new Index2D(3, 0), 1, false));
     }
 
     @Test

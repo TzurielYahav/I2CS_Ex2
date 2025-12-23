@@ -309,6 +309,8 @@ public class Ex2_GUI
 
     private static void drawCell(Pixel2D pos)
     {
+        StdDraw.setPenColor(COLORS[FLOOR_VALUE]);
+        StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
 
         if (map.getPixel(pos) == PLAYER_VALUE)
@@ -317,15 +319,8 @@ public class Ex2_GUI
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == OBSTACLE_VALUE)
             StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
-        else if (map.getPixel(pos) == FLOOR_VALUE)
-            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
         else if (map.getPixel(pos) == FRUIT_VALUE)
-        {
-            StdDraw.setPenColor(COLORS[FLOOR_VALUE]);
-            StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
-            StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.2);
-        }
     }
 
     private static void drawGrid()
