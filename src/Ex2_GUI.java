@@ -38,7 +38,9 @@ public class Ex2_GUI
     private static boolean isGameRunning = false;
     private static boolean cyclic = false;
 
-
+    /**
+     * Draws the map and interface with StdDraw
+     */
     public static void drawMap()
     {
         double maxX = map.getWidth(), maxY = map.getHeight();
@@ -65,14 +67,12 @@ public class Ex2_GUI
             Scanner myReader = new Scanner(myFile);
             ArrayList<String[]> rowList = new ArrayList<>();
             if (myReader.hasNextLine())
-            {
-                String data = myReader.nextLine();
-                cyclic = data.equals("true");
-            }
+                cyclic = myReader.nextLine().equals("true");    // the first line of the file contains true/false for cyclic
+
             while (myReader.hasNextLine())
             {
                 String data = myReader.nextLine();
-                String[] splitString =  data.split(",");
+                String[] splitString =  data.split(",");    // split the rows into cells
                 rowList.add(splitString);
             }
             int[][] mapArr = new int[rowList.size()][rowList.getFirst().length];
@@ -80,7 +80,7 @@ public class Ex2_GUI
             {
                 for (int j = 0; j < rowList.get(i).length; j++)
                 {
-                    mapArr[i][j] = Integer.parseInt(rowList.get(i)[j]);
+                    mapArr[i][j] = Integer.parseInt(rowList.get(i)[j]); // convert every cell string to int and put in the map
                 }
             }
             ans.init(mapArr);
@@ -94,9 +94,9 @@ public class Ex2_GUI
     }
 
     /**
-     *
-     * @param map
-     * @param mapFileName
+     * Saves the map into a txt file
+     * @param map The map to save
+     * @param mapFileName The name of the file to save into
      */
     public static void saveMap(Map2D map, String mapFileName)
     {
@@ -104,9 +104,11 @@ public class Ex2_GUI
         try
         {
             FileWriter myWriter = new FileWriter(mapFileName);
-            myWriter.write(cyclic + "\n");
-            for (int i = 0; i < mapArr.length; i++) {
-                for (int j = 0; j < mapArr[i].length; j++) {
+            myWriter.write(cyclic + "\n");                  // the first row is for cyclic
+            for (int i = 0; i < mapArr.length; i++)
+            {
+                for (int j = 0; j < mapArr[i].length; j++)
+                {
                     myWriter.write(mapArr[i][j] + ",");
                 }
                 myWriter.write("\n");
