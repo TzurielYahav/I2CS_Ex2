@@ -34,7 +34,7 @@ public class Ex2_GUI
     private static Pixel2D enemyPos = new Index2D(0,0);
     private static Pixel2D targetPos = new Index2D(0,0);
     private static int enemyDelayTimer = 0;
-    private static ArrayList<Pixel2D> waypoints = new ArrayList<>();
+    private static final ArrayList<Pixel2D> waypoints = new ArrayList<>();
     private static boolean isGameRunning = false;
     private static boolean cyclic = false;
 
@@ -105,11 +105,11 @@ public class Ex2_GUI
         {
             FileWriter myWriter = new FileWriter(mapFileName);
             myWriter.write(cyclic + "\n");                  // the first row is for cyclic
-            for (int i = 0; i < mapArr.length; i++)
+            for (int[] ints : mapArr)
             {
-                for (int j = 0; j < mapArr[i].length; j++)
+                for (int anInt : ints)
                 {
-                    myWriter.write(mapArr[i][j] + ",");
+                    myWriter.write(anInt + ",");
                 }
                 myWriter.write("\n");
             }
@@ -117,7 +117,7 @@ public class Ex2_GUI
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            throw new RuntimeException(mapFileName + " could not be saved");
         }
     }
 
