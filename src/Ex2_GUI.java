@@ -413,6 +413,7 @@ public class Ex2_GUI
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.text(centerX, centerY, "Game Over");
         isGameRunning = false;
+        cyclic = false;
         int[][] mapArr = new int[10][10];
         map.init(mapArr);
         playerPos = new Index2D(0, 0);

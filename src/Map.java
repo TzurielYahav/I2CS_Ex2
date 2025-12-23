@@ -301,8 +301,8 @@ public class Map implements Map2D, Serializable
     /**
      * Fills this map with the new color (new_v) starting from p.
      * <a href="https://en.wikipedia.org/wiki/Flood_fill">...</a>
-     *
-     *
+     * This function calls the recursive function 'fillPixels'
+     * that fills each cell and then moves to check its neighbors
      * @param xy The pos to start filling from
      * @param new_v The new value to fill
      * @param cyclic If the map is cyclic
