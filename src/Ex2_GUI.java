@@ -47,15 +47,14 @@ public class Ex2_GUI
         StdDraw.clear();
 
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(maxX / 2, maxY + (maxY / 20), "'WASD' for movement  |  Numbers to switch levels  |  'Q' to stop and save");
+        StdDraw.text(maxX / 2, maxY + (maxY / 20), "'WASD' for movement  |  '1-4' to switch levels  |  'Q' to stop and save");
         drawGrid();
-        drawCharacter(playerPos, playerPos, PLAYER_VALUE);
-        drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
     }
 
     /**
-     * @param mapFileName
-     * @return
+     * Loads a map from a txt file
+     * @param mapFileName The file to load from
+     * @return A new map object containing the map from the file
      */
     public static Map2D loadMap(String mapFileName) throws FileNotFoundException
     {
@@ -138,7 +137,7 @@ public class Ex2_GUI
         saveMap(map, mapFile);
     }
 
-    /// ///////////// Private functions ///////////////
+    /////////////// Private functions ///////////////
 
     private static void gameInit()
     {
@@ -146,7 +145,6 @@ public class Ex2_GUI
         enemyDelayTimer = 0;
         playerPos = new Index2D(0, 0);
         enemyPos = new Index2D(map.getWidth() - 1, map.getHeight() - 1);
-        targetPos = playerPos;
         for (int i = 0; i < map.getWidth(); i++)
         {
             for (int j = 0; j < map.getHeight(); j++)
@@ -157,7 +155,10 @@ public class Ex2_GUI
                     enemyPos = new Index2D(i, j);
             }
         }
+        targetPos = playerPos;
         drawMap();
+        drawCharacter(playerPos, playerPos, PLAYER_VALUE);
+        drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
     }
 
     private static void gameLoop()
@@ -394,6 +395,8 @@ public class Ex2_GUI
         }
         waypoints.clear();
         drawMap();
+        drawCharacter(playerPos, playerPos, PLAYER_VALUE);
+        drawCharacter(enemyPos, enemyPos, ENEMY_VALUE);
     }
 
     private static void gameOver()
