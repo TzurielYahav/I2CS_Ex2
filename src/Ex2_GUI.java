@@ -311,8 +311,8 @@ public class Ex2_GUI
     {
         StdDraw.setPenColor(COLORS[FLOOR_VALUE]);
         StdDraw.filledRectangle(pos.getX() + 0.5, pos.getY() + 0.5, 0.5, 0.5);
-        StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
 
+        StdDraw.setPenColor(COLORS[map.getPixel(pos)]);
         if (map.getPixel(pos) == PLAYER_VALUE)
             StdDraw.filledCircle(pos.getX() + 0.5, pos.getY() + 0.5, 0.4);
         else if (map.getPixel(pos) == ENEMY_VALUE)
