@@ -300,7 +300,7 @@ public class Map implements Map2D, Serializable
 
     /**
      * Fills this map with the new color (new_v) starting from p.
-     * https://en.wikipedia.org/wiki/Flood_fill
+     * <a href="https://en.wikipedia.org/wiki/Flood_fill">...</a>
      *
      *
      * @param xy The pos to start filling from
@@ -323,7 +323,7 @@ public class Map implements Map2D, Serializable
 
     /**
      * BFS like shortest the computation based on iterative raster implementation of BFS, see:
-     * https://en.wikipedia.org/wiki/Breadth-first_search
+     * <a href="https://en.wikipedia.org/wiki/Breadth-first_search">...</a>
      * Searches for the shortest from p1 to p2,
      * uses a map of all the already explored cells, a queue of all the explored and to be explored cells and a queue of the parent of each explored cell
      * loops through the explored queue, for each cell in ExQ search for any valid neighbor and add it to the ExQ, and it's parent to the PrQ.
