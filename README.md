@@ -54,18 +54,20 @@ This class is responsible for drawing the map and interface to interact with, us
     public static void drawMap()
 
 * This function Draws the Map object of the Ex2_GUI class
+
 <br></br>
 
 
     public static Map2D loadMap(String mapFileName) throws FileNotFoundException
 
 * This function loads a map from a txt file
-<br></br>
 
+<br></br>
 
     public static void saveMap(Map2D map, String mapFileName)
 
 * This function saves the map into a txt file
+
 <br></br>
 
 
